@@ -1,8 +1,20 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase
 from markupsafe import escape
 from flask import url_for
 
 app = Flask(__name__)
+
+class Base(DeclarativeBase):
+  pass
+
+db = SQLAlchemy(model_class=Base)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///photos.db"
+# initialize the app with the extension
+db.init_app(app)
+
 
 @app.route("/")
 def index():

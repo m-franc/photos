@@ -27,7 +27,7 @@ def create_app(test_config=None):
 
     # a simple page that says hello
     @app.route('/')
-    def hello():
+    def index():
         return 'Hello, World!'
     db.init_app(app)
     app.register_blueprint(auth.bp)

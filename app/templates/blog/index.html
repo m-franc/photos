@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Pictures{% endblock %}</h1>
+  {% if g.user %}
+    <a class="action" href="{{ url_for('blog.create') }}">New</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% for picture in pictures %}
+    <article class="picture">
+      <header>
+        <div>
+          <h1>{{ picture['title'] }}</h1>
+          <div class="about">by {{ picture['username'] }} on {{ picture['created'].strftime('%Y-%m-%d') }}</div>
+        </div>
+        {% if g.user['id'] == picture['author_id'] %}
+          <a class="action" href="{{ url_for('blog.update', id=picture['id']) }}">Edit</a>
+        {% endif %}
+      </header>
+      <p class="path">{{ picture['path'] }}</p>
+      <p class="description">{{ picture['body'] }}</p>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}

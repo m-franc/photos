@@ -1,9 +1,7 @@
 import os
 from flask import Flask
 from . import db
-from . import auth
-from flask import render_template
-
+from . import auth, blog
 
 def create_app(test_config=None):
     # create and configure the app
@@ -26,11 +24,10 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    # a simple page that says hello
-    @app.route('/')
-    def index():
-        return render_template('index.html')
+
     db.init_app(app)
     app.register_blueprint(auth.bp)
+    app.register_blueprint(blog.bp)
+    app.add_url_rule('/', endpoint="index")
 
     return app

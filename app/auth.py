@@ -9,9 +9,16 @@ from app.db import get_db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
+
+@bp.route('/')
+def index():
+    db = get_db()
+    users = db.execute("SELECT * FROM user").fetchall()
+    pictures = db.execute("SELECT * FROM picture").fetchall()
+    return render_template('auth/index.html', users=users, pictures=pictures)
+
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
-    bonjour = "OKAY"
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']

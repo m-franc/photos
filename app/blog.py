@@ -2,13 +2,14 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for
 )
 from werkzeug.exceptions import abort
-
 from app.auth import login_required
 from app.db import get_db
 
 bp = Blueprint('blog', __name__)
 
-@bp.route('/blog')
+# bp.add_url_rule('/', endpoint='index')
+
+@bp.route('/')
 def index():
     db = get_db()
     pictures = db.execute(
@@ -18,7 +19,7 @@ def index():
     ).fetchall()
     return render_template('blog/index.html', pictures=pictures)
 
-@bp.route('/create', methods=('GET', 'POST'))
+@bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
     if request.method == 'POST':
@@ -58,7 +59,7 @@ def get_picture(id, check_author=True):
         abort(403)
     return picture
 
-@bp.route('/<int:id>/update', methods=('GET', 'POST'))
+@bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required
 def update(id):
     picture = get_picture(id)
@@ -86,7 +87,7 @@ def update(id):
             return redirect(url_for('blog.index'))
     return render_template('blog/update.html', picture=picture)
 
-@bp.route('/<int:id>/delete', methods=('POST'))
+@bp.route('/<id>/delete', methods=['POST'])
 @login_required
 def delete(id):
     get_picture(id)

@@ -1,9 +1,14 @@
+import os
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for
 )
 from werkzeug.exceptions import abort
 from app.auth import login_required
 from app.db import get_db
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = '/Users/maximefranc/Documents/projects/photos/app/static/pictures'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'raf'}
 
 bp = Blueprint('blog', __name__)
 
@@ -19,23 +24,37 @@ def index():
     ).fetchall()
     return render_template('blog/index.html', pictures=pictures)
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
     if request.method == 'POST':
         title = request.form['title']
         description = request.form['description']
-        path = request.form['path']
         error = None
         if not title:
             error = 'Title is required.'
-        if not path:
-            error = 'Path is required.'
         if not description:
             error = 'Description is required.'
         if error is not None:
             flash(error)
         else:
+            # check if the post request has the file part
+            if 'path' not in request.files:
+                flash('No file part')
+                return redirect(url_for('blog.index'))
+            file = request.files['path']
+            # If the user does not select a file, the browser submits an
+            # empty file without a filename.
+            if file.filename == '':
+                flash('No selected file')
+                return redirect(url_for('blog.index'))
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(UPLOAD_FOLDER, filename))
+                path = filename
             db = get_db()
             db.execute(
                 'INSERT INTO picture (title, description, path, author_id)'

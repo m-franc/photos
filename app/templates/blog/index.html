@@ -19,7 +19,7 @@
           <a class="action" href="{{ url_for('blog.update', id=picture['id']) }}">Edit</a>
         {% endif %}
       </header>
-      <p class="path">{{ picture['path'] }}</p>
+      <img class="path" src="{{ url_for('static', filename = 'pictures/' + picture['path']) }}" width="400" height="200" />
       <p class="description">{{ picture['body'] }}</p>
     </article>
     {% if not loop.last %}

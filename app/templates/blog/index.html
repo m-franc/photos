@@ -22,7 +22,7 @@
       <a href="{{ url_for('blog.show', id=picture['id']) }}">
         <img class="path" src="{{ url_for('static', filename = 'pictures/' + picture['path']) }}" width="400" height="200" />
       </a>
-      <p class="description">{{ picture['body'] }}</p>
+      <p class="description">{{ picture['description'] }}</p>
     </article>
     {% if not loop.last %}
       <hr>

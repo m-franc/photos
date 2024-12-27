@@ -94,12 +94,9 @@ def update(id):
     if request.method == 'POST':
         title = request.form['title']
         description = request.form['description']
-        path = request.form['path']
         error = None
         if not title:
             error = 'Title is required.'
-        if not path:
-            error = 'Path is required.'
         if not description:
             error = 'Description is required.'
         if error is not None:
@@ -107,9 +104,9 @@ def update(id):
         else:
             db = get_db()
             db.execute(
-                'UPDATE picture SET title = ?, description = ?, path = ?'
+                'UPDATE picture SET title = ?, description = ?'
                 ' WHERE id = ?',
-                (title, description, path, id)
+                (title, description, id)
             )
             db.commit()
             return redirect(url_for('blog.index'))

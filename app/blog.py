@@ -7,6 +7,7 @@ from app.auth import login_required
 from app.db import get_db
 from werkzeug.utils import secure_filename
 
+
 UPLOAD_FOLDER = '/Users/maximefranc/Documents/projects/photos/app/static/pictures'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'raf'}
 
@@ -84,6 +85,7 @@ def get_picture(id, show, check_author=True):
 @bp.route('/<int:id>', methods=['GET'])
 def show(id):
     picture = get_picture(id, 1)
+
     return render_template('blog/show.html', picture=picture)
 
 

@@ -12,14 +12,16 @@
     <article class="picture">
       <header>
         <div>
-          <h1><a href="{{ url_for('blog.show', id=picture['id']) }}">{{ picture['title'] }}</a></h1>
+          <h1>{{ picture['title'] }}</a></h1>
           <div class="about">by {{ picture['username'] }} on {{ picture['created'].strftime('%Y-%m-%d') }}</div>
         </div>
         {% if g.user['id'] == picture['author_id'] %}
           <a class="action" href="{{ url_for('blog.update', id=picture['id']) }}">Edit</a>
         {% endif %}
       </header>
-      <img class="path" src="{{ url_for('static', filename = 'pictures/' + picture['path']) }}" width="400" height="200" />
+      <a href="{{ url_for('blog.show', id=picture['id']) }}">
+        <img class="path" src="{{ url_for('static', filename = 'pictures/' + picture['path']) }}" width="400" height="200" />
+      </a>
       <p class="description">{{ picture['body'] }}</p>
     </article>
     {% if not loop.last %}

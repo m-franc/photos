@@ -2,4 +2,9 @@
 
 {% block header %}
   <h1>{% block title %}{{ picture['title'] }}{% endblock %}</h1>
+  <a href="{{ url_for('blog.index') }}">Retour à la galerie</a>
+{% endblock %}
+
+{% block content %}
+  <img class="path" src="{{ url_for('static', filename = 'pictures/' + picture['path']) }}" style="width: 95%; padding-top: 20px; margin-left: 20px;" />
 {% endblock %}

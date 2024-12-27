@@ -80,7 +80,7 @@ def get_picture(id, check_author=True):
         abort(403)
     return picture
 
-@bp.route('/<int:id>')
+@bp.route('/<int:id>', methods=['GET'])
 def show(id):
     db = get_db()
     picture = get_picture(id)
@@ -120,6 +120,6 @@ def update(id):
 def delete(id):
     get_picture(id)
     db = get_db()
-    db.execute('DELETE FROM picture WHERE id = ?', (id))
+    db.execute('DELETE FROM picture WHERE id = ?', (id,))
     db.commit()
     return redirect(url_for('blog.index'))

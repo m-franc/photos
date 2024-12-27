@@ -76,8 +76,8 @@ def get_picture(id, check_author=True):
     ).fetchone()
     if picture is None:
         abort(404, f"Picture id {id} doesn't exist.")
-    if check_author and picture['author_id'] != g.user['id']:
-        abort(403)
+    # if check_author and picture['author_id'] != g.user['id']:
+    #     abort(403)
     return picture
 
 @bp.route('/<int:id>', methods=['GET'])

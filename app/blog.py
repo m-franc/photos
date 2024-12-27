@@ -24,6 +24,8 @@ def index():
     ).fetchall()
     return render_template('blog/index.html', pictures=pictures)
 
+
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -77,6 +79,13 @@ def get_picture(id, check_author=True):
     if check_author and picture['author_id'] != g.user['id']:
         abort(403)
     return picture
+
+@bp.route('/<int:id>')
+def show(id):
+    db = get_db()
+    picture = get_picture(id)
+    return render_template('blog/show.html', picture=picture)
+
 
 @bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required

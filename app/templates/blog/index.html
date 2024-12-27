@@ -12,7 +12,7 @@
     <article class="picture">
       <header>
         <div>
-          <h1>{{ picture['title'] }}</h1>
+          <h1><a href="{{ url_for('blog.show', id=picture['id']) }}">{{ picture['title'] }}</a></h1>
           <div class="about">by {{ picture['username'] }} on {{ picture['created'].strftime('%Y-%m-%d') }}</div>
         </div>
         {% if g.user['id'] == picture['author_id'] %}

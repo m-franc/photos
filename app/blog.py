@@ -6,7 +6,8 @@ from werkzeug.exceptions import abort
 from app.auth import login_required
 from app.db import get_db
 from werkzeug.utils import secure_filename
-
+from PIL import Image
+from PIL.ExifTags import TAGS
 
 UPLOAD_FOLDER = '/Users/maximefranc/Documents/projects/photos/app/static/pictures'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'raf'}
@@ -85,8 +86,9 @@ def get_picture(id, show, check_author=True):
 @bp.route('/<int:id>', methods=['GET'])
 def show(id):
     picture = get_picture(id, 1)
-
-    return render_template('blog/show.html', picture=picture)
+    image = Image.open(UPLOAD_FOLDER + '/' + picture['path'])
+    exifdata = image._getexif()
+    return render_template('blog/show.html', picture=picture, exifdata=exifdata)
 
 
 @bp.route('/<int:id>/update', methods=['GET', 'POST'])

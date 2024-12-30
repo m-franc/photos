@@ -1,6 +1,6 @@
 import os
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, flash, g, redirect, render_template, request, url_for, jsonify
 )
 from werkzeug.exceptions import abort
 from app.auth import login_required
@@ -24,7 +24,7 @@ def index():
         ' FROM picture p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC'
     ).fetchall()
-    return render_template('blog/index.html', pictures=pictures)
+    return jsonify(pictures)
 
 
 

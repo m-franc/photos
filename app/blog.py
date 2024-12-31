@@ -18,12 +18,12 @@ bp = Blueprint('blog', __name__)
 
 # bp.add_url_rule('/', endpoint='index')
 
-def sqlquery_to_array_of_object(pictures):
+def sqlquery_to_array_of_object(query):
     columns = []
 
-    rows = pictures.fetchall()
+    rows = query.fetchall()
     data = []
-    for col in pictures.description:
+    for col in query.description:
         columns.append(col[0])
     for row in rows:
         data.append(dict(zip(columns, row)))

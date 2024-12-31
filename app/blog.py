@@ -10,12 +10,24 @@ from PIL import Image
 from PIL.ExifTags import TAGS
 import json
 
+
 UPLOAD_FOLDER = '/Users/maximefranc/Documents/projects/photos/app/static/pictures'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'raf'}
 
 bp = Blueprint('blog', __name__)
 
 # bp.add_url_rule('/', endpoint='index')
+
+def sqlquery_to_array_of_object(pictures):
+    columns = []
+
+    rows = pictures.fetchall()
+    data = []
+    for col in pictures.description:
+        columns.append(col[0])
+    for row in rows:
+        data.append(dict(zip(columns, row)))
+    return data
 
 @bp.route('/')
 def index():
@@ -24,16 +36,10 @@ def index():
         'SELECT p.id, title, description, created, path, author_id, username'
         ' FROM picture p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC'
-    ).fetchall()
-    result = []
-    temp = {}
-    for i, row in enumerate(pictures):
-        temp[row[0]] = row[i - 1]
-        print(temp)
-        result.append(temp)
-    json_result = json.dumps(result, indent=4, sort_keys=True, default=str)
-    # print(json_result)
-    return json.dumps(json_result)
+    )
+    # Create the columns of the json statam
+    data = sqlquery_to_array_of_object(pictures)
+    return json.dumps(data, indent=4, sort_keys=True, default=str)
 
 
 

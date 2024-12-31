@@ -25,6 +25,8 @@ interface Photo {
   username: string
 }
 
+const UPLOAD_FOLDER = 'http://127.0.0.1:5000/static/pictures/'
+
 export default function PhotoIndex() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
@@ -51,7 +53,6 @@ export default function PhotoIndex() {
 
   if (loading) return <p>⏳ Chargement des photos...</p>;
   if (error) return <p>❌ Erreur : {error}</p>;
-
   return (
       <div>
           <h1>📸 Galerie de Photos</h1>
@@ -59,7 +60,7 @@ export default function PhotoIndex() {
               {photos.map((photo) => (
                   <div key={photo.id} style={{ textAlign: 'center' }}>
                       <img
-                          src={photo.path}
+                          src={UPLOAD_FOLDER + photo.path}
                           alt={photo.title}
                           style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '8px' }}
                       />

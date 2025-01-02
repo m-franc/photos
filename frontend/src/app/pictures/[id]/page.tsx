@@ -1,8 +1,8 @@
 
 'use client'
 
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation'
 
 // async function getImageData() {
 //   const res = await fetch('http://127.0.0.1:5000/', {
@@ -29,12 +29,13 @@ interface Photo {
 const UPLOAD_FOLDER = 'http://127.0.0.1:5000/static/pictures/'
 
 export default function PhotoIndex() {
-  const [photos, setPhotos] = useState<Photo[]>([]);
+  const params = useParams<{ id: string }>()
+  const [photo, setPhoto] = useState<Photo | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-      fetch('http://127.0.0.1:5000/') // Endpoint Flask
+      fetch(`http://127.0.0.1:5000/${params.id}`) // Endpoint Flask
           .then((response) => {
               if (!response.ok) {
                   throw new Error('Erreur réseau');
@@ -43,7 +44,7 @@ export default function PhotoIndex() {
           })
           .then((data) => {
               console.log('Photos reçues:', data);
-              setPhotos(data);
+              setPhoto(data);
           })
           .catch((error) => {
               console.error('Erreur API:', error);
@@ -56,19 +57,17 @@ export default function PhotoIndex() {
   if (error) return <p>❌ Erreur : {error}</p>;
   return (
       <div>
-          <h1>📸 Galerie de Photos</h1>
+          <h1>📸 Page de la photo</h1>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
-              {photos.map((photo) => (
                   <div key={photo.id} style={{ textAlign: 'center' }}>
                       <img
                           src={UPLOAD_FOLDER + photo.path}
                           alt={photo.title}
                           style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '8px' }}
                       />
-                      <Link href={`/pictures/${photo.id}`}><h3>{photo.title}</h3>
-                      </Link>
+                      <h3>{photo.title}</h3>
                   </div>
-              ))}
+
           </div>
       </div>
   );

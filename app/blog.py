@@ -102,9 +102,18 @@ def get_picture(id, show, check_author=True):
 @bp.route('/<int:id>', methods=['GET'])
 def show(id):
     picture = get_picture(id, 1)
-    image = Image.open(UPLOAD_FOLDER + '/' + picture['path'])
-    exifdata = image._getexif()
-    return render_template('blog/show.html', picture=picture, exifdata=exifdata)
+    # image = Image.open(UPLOAD_FOLDER + '/' + picture['path'])
+    # exifdata = image._getexif()
+    data = {
+        "id": picture[0],
+        "title": picture[1],
+        "description": picture[2],
+        "path": picture[3],
+        "created": picture[4],
+        "author_id": picture[5],
+        "username": picture[6]
+       }
+    return json.dumps(data, indent=4, sort_keys=True, default=str)
 
 
 @bp.route('/<int:id>/update', methods=['GET', 'POST'])

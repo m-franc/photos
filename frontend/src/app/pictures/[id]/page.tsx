@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation'
+import Image from 'next/image'
 
 // async function getImageData() {
 //   const res = await fetch('http://127.0.0.1:5000/', {
@@ -29,10 +30,11 @@ interface Photo {
 const UPLOAD_FOLDER = 'http://127.0.0.1:5000/static/pictures/'
 
 export default function PhotoIndex() {
-  const params = useParams<{ tag: string; id: string }>()
-  const [photo, setPhotos] = useState<Photo[]>([]);
+  const params = useParams<{ id: string }>()
+  const [photo, setPhoto] = useState<Photo | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
       fetch(`http://127.0.0.1:5000/${params.id}`) // Endpoint Flask
           .then((response) => {
@@ -43,7 +45,7 @@ export default function PhotoIndex() {
           })
           .then((data) => {
               console.log('Photos reçues:', data);
-              setPhotos(data);
+              setPhoto(data);
           })
           .catch((error) => {
               console.error('Erreur API:', error);

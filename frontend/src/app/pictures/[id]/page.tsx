@@ -3,7 +3,6 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation'
-import Image from 'next/image'
 
 // async function getImageData() {
 //   const res = await fetch('http://127.0.0.1:5000/', {

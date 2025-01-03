@@ -64,3 +64,11 @@ li {
 strong {
   color: #333;
 }
+
+.form {
+  color: black;
+}
+
+.form > button {
+  background-color: red;
+}

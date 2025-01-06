@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from "react"
-import { useForm } from "react-hook-form"
+import { useController, useForm } from "react-hook-form"
 
 type FormData = {
   title: string,
@@ -9,11 +9,27 @@ type FormData = {
   path: string
 }
 
+const FileInput = ({ control, name }) => {
+  const { field } = useController({ control, name });
+  const [value, setValue] = React.useState("");
+  return (
+    <input
+      type="file"
+      value={value}
+      onChange={(e) => {
+        setValue(e.target.value);
+        field.onChange(e.target.files);
+      }}
+    />
+  );
+};
+
 export default function App() {
   const {
     register,
-    setValue,
+    // setValue,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<FormData>()
   const onSubmit = handleSubmit( async (data) => {
@@ -38,15 +54,15 @@ export default function App() {
       <label>Description</label>
       <input {...register("description")} />
       <label>Photo</label>
-      <input type="file" {...register("path")} />
+      <FileInput name="file" control={control} />
       <button
         type="submit"
-        onClick={() => {
-          setValue("title", "value") // ✅
-          setValue("description", "value")
-          setValue("path", "value") // ❌: true is not string
-          errors.bill // ❌: property bill does not exist
-        }}
+        // onClick={() => {
+        //   setValue("title", "value") // ✅
+        //   setValue("description", "value")
+        //   setValue("path", "value") // ❌: true is not string
+        //   errors.bill // ❌: property bill does not exist
+        // }}
       >
         SetValue
       </button>

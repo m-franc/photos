@@ -32,7 +32,7 @@ export default function App() {
   // firstName and lastName will have correct type
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="form">
+    <form onSubmit={handleSubmit(onSubmit)} className="form" method="post">
       <label>Titre</label>
       <input {...register("title")} />
       <label>Description</label>

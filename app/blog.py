@@ -48,11 +48,13 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @bp.route('/create', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def create():
     if request.method == 'POST':
-        title = request.form['title']
-        description = request.form['description']
+        data = request.get_json()
+        print(data)
+        title = data['title']
+        description = data['description']
         error = None
         if not title:
             error = 'Title is required.'
@@ -62,24 +64,24 @@ def create():
             flash(error)
         else:
             # check if the post request has the file part
-            if 'path' not in request.files:
+            if 'path' not in data:
                 flash('No file part')
                 return redirect(url_for('blog.index'))
-            file = request.files['path']
+            file = data['path']
             # If the user does not select a file, the browser submits an
             # empty file without a filename.
-            if file.filename == '':
+            if file == '':
                 flash('No selected file')
                 return redirect(url_for('blog.index'))
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
+            if file and allowed_file(file):
+                filename = secure_filename(file)
                 file.save(os.path.join(UPLOAD_FOLDER, filename))
                 path = filename
             db = get_db()
             db.execute(
                 'INSERT INTO picture (title, description, path, author_id)'
                 ' VALUES (?, ?, ?, ?)',
-                (title, description, path, g.user['id'])
+                (title, description, path, 1)
             )
             db.commit()
             return redirect(url_for('blog.index'))

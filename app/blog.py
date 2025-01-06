@@ -52,7 +52,7 @@ def allowed_file(filename):
 def create():
     if request.method == 'POST':
         data = request.get_json()
-        print(data)
+        print(data["file"])
         title = data['title']
         description = data['description']
         error = None
@@ -64,10 +64,10 @@ def create():
             flash(error)
         else:
             # check if the post request has the file part
-            if 'path' not in data:
+            if 'file' not in data:
                 flash('No file part')
                 return redirect(url_for('blog.index'))
-            file = data['path']
+            file = data['file']
             # If the user does not select a file, the browser submits an
             # empty file without a filename.
             if file == '':

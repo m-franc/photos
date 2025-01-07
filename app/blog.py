@@ -66,14 +66,14 @@ def create():
             if 'path' not in request.files:
                 flash('No file part')
                 return redirect(url_for('blog.index'))
-            file = request.form['path']
+            file = request.files.get("path")
             # If the user does not select a file, the browser submits an
             # empty file without a filename.
-            if file == '':
+            if file.filename == '':
                 flash('No selected file')
                 return redirect(url_for('blog.index'))
-            if file and allowed_file(file):
-                filename = secure_filename(file)
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
                 file.save(os.path.join(UPLOAD_FOLDER, filename))
                 path = filename
             db = get_db()

@@ -51,10 +51,9 @@ def allowed_file(filename):
 # @login_required
 def create():
     if request.method == 'POST':
-        data = request.get_json()
-        print(data["file"])
-        title = data['title']
-        description = data['description']
+
+        title = request.form['title']
+        description = request.form['description']
         error = None
         if not title:
             error = 'Title is required.'
@@ -64,10 +63,10 @@ def create():
             flash(error)
         else:
             # check if the post request has the file part
-            if 'file' not in data:
+            if 'path' not in request.files:
                 flash('No file part')
                 return redirect(url_for('blog.index'))
-            file = data['file']
+            file = request.form['path']
             # If the user does not select a file, the browser submits an
             # empty file without a filename.
             if file == '':

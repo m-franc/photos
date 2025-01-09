@@ -17,16 +17,16 @@ export default function App() {
   } = useForm<FormData>()
   const onSubmit = handleSubmit( async (data) => {
     try {
-        const response = await fetch('http://localhost:5000/auth/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
-        console.log('Réponse :', await response.json());
-      } catch (error) {
-        console.error('Erreur :', error);
-      }
-      redirect('/pictures')
+      const response = await fetch('http://localhost:5000/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      console.log('Réponse :', await response.json());
+    } catch (error) {
+      console.error('Erreur :', error);
+    }
+    redirect('/pictures')
   })
   // firstName and lastName will have correct type
 
@@ -35,7 +35,7 @@ export default function App() {
       <label>username</label>
       <input {...register("username")} />
       <label>password</label>
-      <input {...register("password")} />
+      <input type="password" {...register("password")} />
       <button
         type="submit">
         CREER SON COMPTE

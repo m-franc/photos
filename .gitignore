@@ -13,3 +13,4 @@ dist/
 build/
 *.egg-info/
 app/static/pictures/
+node_modules/

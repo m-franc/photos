@@ -56,7 +56,12 @@ export default function PhotoIndex() {
   if (error) return <p>❌ Erreur : {error}</p>;
   return (
       <div>
-          <h1>📸 Galerie de Photos</h1>
+          <span>
+            <h1>📸 Galerie de Photos</h1>
+          </span>
+          <span>
+            <Link href={`/pictures/new`}><h1>Ajouter une photo</h1></Link>
+          </span>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
               {photos.map((photo) => (
                   <div key={photo.id} style={{ textAlign: 'center' }}>

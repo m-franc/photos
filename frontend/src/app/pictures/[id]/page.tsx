@@ -1,6 +1,8 @@
 
 'use client'
 
+
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation'
 
@@ -58,6 +60,8 @@ export default function PhotoIndex() {
   return (
       <div>
           <h1>📸 Page de la photo</h1>
+          <Link href={`/pictures/new`}><h1>Ajouter une photo</h1></Link>
+          <Link href={`/pictures/`}><h1>Retour à la galerie</h1></Link>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
                   <div key={photo.id} style={{ textAlign: 'center' }}>
                       <img

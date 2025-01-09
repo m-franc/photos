@@ -2,6 +2,8 @@
 
 import * as React from "react"
 import { useController, useForm, Control } from "react-hook-form"
+import { redirect } from 'next/navigation'
+import Link from 'next/link';
 
 type FormData = {
   title: string,
@@ -50,38 +52,40 @@ export default function App() {
     } catch (error) {
       console.error('Erreur :', error);
     }
-    console.log(data)
+    redirect('/pictures')
   });
   // firstName and lastName will have correct type
 
   return (
-
-    <form onSubmit={handleSubmit(onSubmit)} className="form" method="post">
-      <label>Titre</label>
-      <input {...register("title")} />
-      <label>Description</label>
-      <input {...register("description")} />
-      <label>Photo</label>
-      <FileInput name="path" control={control} />
-      {/* /* <input
-        type="file"
-        onChange={(e) => {
-          if (e.target.files?.[0]) {
-            setValue('path', e.target.files[0]);
-          }
-        }}
-      /> */}
-      <button
-        type="submit"
-        // onClick={() => {
-        //   setValue("title", "value") // ✅
-        //   setValue("description", "value")
-        //   setValue("path", "value") // ❌: true is not string
-        //   errors.bill // ❌: property bill does not exist
-        // }}
-      >
-        SetValue
-      </button>
-    </form>
+    <div>
+      <Link href={`/pictures/`}><h1>Retour à la galerie</h1></Link>
+      <form onSubmit={handleSubmit(onSubmit)} className="form" method="post">
+        <label>Titre</label>
+        <input {...register("title")} />
+        <label>Description</label>
+        <input {...register("description")} />
+        <label>Photo</label>
+        <FileInput name="path" control={control} />
+        {/* /* <input
+          type="file"
+          onChange={(e) => {
+            if (e.target.files?.[0]) {
+              setValue('path', e.target.files[0]);
+            }
+          }}
+        /> */}
+        <button
+          type="submit"
+          // onClick={() => {
+          //   setValue("title", "value") // ✅
+          //   setValue("description", "value")
+          //   setValue("path", "value") // ❌: true is not string
+          //   errors.bill // ❌: property bill does not exist
+          // }}
+        >
+          SetValue
+        </button>
+      </form>
+    </div>
   )
 }

@@ -3,6 +3,12 @@ from flask import Flask
 from . import db
 from . import auth, blog
 from flask_cors import CORS
+from flask import jsonify
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import JWTManager
+from flask_jwt_extended import set_access_cookies
+from flask_jwt_extended import unset_jwt_cookies
 
 
 def create_app(test_config=None):
@@ -17,6 +23,7 @@ def create_app(test_config=None):
         DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
     )
 
+    jwt = JWTManager(app)
     if test_config is None:
         # load the instance config, if it exists, when not testing
         app.config.from_pyfile('config.py', silent=True)

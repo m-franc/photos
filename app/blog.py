@@ -10,8 +10,6 @@ from PIL import Image
 from PIL.ExifTags import TAGS
 import json
 
-
-
 UPLOAD_FOLDER = '/Users/maximefranc/Documents/projects/photos/app/static/pictures'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'raf'}
 

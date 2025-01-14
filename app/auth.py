@@ -2,11 +2,21 @@ import functools
 from collections.abc import Mapping
 
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
+    Blueprint, flash, g, redirect, render_template, jsonify, request, session, url_for
 )
+
+from flask_jwt_extended import (
+    JWTManager, jwt_required, create_access_token,
+    create_refresh_token,
+    get_jwt_identity, set_access_cookies,
+    set_refresh_cookies, unset_jwt_cookies
+)
+
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app.db import get_db
+
+
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -19,7 +29,6 @@ def index():
 
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
-
     if request.method == 'POST':
 
         data = request.get_json()
@@ -62,10 +71,12 @@ def login():
         elif not check_password_hash(user['password'], password):
             error = 'Incorrect password.'
         if error is None:
-            session.clear()
-            session['user_id'] = user['id']
-            return redirect(url_for('index'))
-        flash(error)
+            access_token = create_access_token(identity=username)
+            response = jsonify(message="Login successful!")
+            set_access_cookies(response, access_token)
+            print('OKOKOKOKOKOKOKOKOKOKOKOK !!!!!!!!')
+            return response
+        return jsonify(message="Invalid username or password"), 401
     return render_template('auth/login.html')
 
 @bp.before_app_request

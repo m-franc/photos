@@ -16,6 +16,8 @@ def create_app(test_config=None):
     # Only allow JWT cookies to be sent over https. In production, this
     # should likely be True
     app.config['JWT_COOKIE_SECURE'] = False
+    app.config['JWT_COOKIE_SAMESITE'] = "Lax"
+    app.config['JWT_COOKIE_HTTPONLY'] = True
     # Set the cookie paths, so that you are only sending your access token
     # cookie to the access endpoints, and only sending your refresh token
     # to the refresh endpoint. Technically this is optional, but it is in
@@ -31,7 +33,7 @@ def create_app(test_config=None):
 
     jwt.init_app(app)
 
-    CORS(app, resources={
+    CORS(app, supports_credentials=True, resources={
     r"/*": {"origins": "http://localhost:3000"}
     })
 

@@ -21,6 +21,7 @@ export default function App() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
+        credentials: 'include',
       });
       console.log('Réponse :', await response.json());
     } catch (error) {

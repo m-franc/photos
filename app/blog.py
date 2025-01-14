@@ -9,8 +9,6 @@ from werkzeug.utils import secure_filename
 from PIL import Image
 from PIL.ExifTags import TAGS
 import json
-from app import jwt
-
 
 UPLOAD_FOLDER = '/Users/maximefranc/Documents/projects/photos/app/static/pictures'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'raf'}

@@ -1,23 +1,15 @@
 import functools
 from collections.abc import Mapping
 
-
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app.db import get_db
-from flask import jsonify
-from flask_jwt_extended import create_access_token
-from flask_jwt_extended import jwt_required
-from flask_jwt_extended import JWTManager
-from flask_jwt_extended import set_access_cookies
-from flask_jwt_extended import unset_jwt_cookies
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-jwt = JWTManager(app)
 @bp.route('/')
 def index():
     db = get_db()
@@ -27,7 +19,9 @@ def index():
 
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
+
     if request.method == 'POST':
+
         data = request.get_json()
         username = data['username']
         password = data['password']

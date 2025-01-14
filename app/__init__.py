@@ -1,23 +1,35 @@
 import os
 from flask import Flask
+
 from . import db
 from . import auth, blog
 from flask_cors import CORS
-from flask import jsonify
-from flask_jwt_extended import create_access_token
-from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
-from flask_jwt_extended import set_access_cookies
-from flask_jwt_extended import unset_jwt_cookies
 
+jwt = JWTManager()
 
-
-app = Flask(__name__, instance_relative_config=True)
-
-jwt = JWTManager(app)
-def create_app(app, test_config=None):
+def create_app(test_config=None):
     # create and configure the app
 
+    app = Flask(__name__, instance_relative_config=True)
+    app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+    # Only allow JWT cookies to be sent over https. In production, this
+    # should likely be True
+    app.config['JWT_COOKIE_SECURE'] = False
+    # Set the cookie paths, so that you are only sending your access token
+    # cookie to the access endpoints, and only sending your refresh token
+    # to the refresh endpoint. Technically this is optional, but it is in
+    # your best interest to not send additional cookies in the request if
+    # they aren't needed.
+    app.config['JWT_ACCESS_COOKIE_PATH'] = '/api/'
+    app.config['JWT_REFRESH_COOKIE_PATH'] = '/token/refresh'
+    # Enable csrf double submit protection. See this for a thorough
+    # explanation: http://www.redotheweb.com/2015/11/09/api-security.html
+    app.config['JWT_COOKIE_CSRF_PROTECT'] = True
+    # Set the secret key to sign the JWTs with
+    app.config['JWT_SECRET_KEY'] = 'qsdfgh'  # Change this!
+
+    jwt.init_app(app)
 
     CORS(app, resources={
     r"/*": {"origins": "http://localhost:3000"}

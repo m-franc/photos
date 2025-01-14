@@ -11,9 +11,14 @@ from flask_jwt_extended import set_access_cookies
 from flask_jwt_extended import unset_jwt_cookies
 
 
-def create_app(test_config=None):
+
+app = Flask(__name__, instance_relative_config=True)
+
+jwt = JWTManager(app)
+def create_app(app, test_config=None):
     # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
+
+
     CORS(app, resources={
     r"/*": {"origins": "http://localhost:3000"}
     })
@@ -23,7 +28,7 @@ def create_app(test_config=None):
         DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
     )
 
-    jwt = JWTManager(app)
+
     if test_config is None:
         # load the instance config, if it exists, when not testing
         app.config.from_pyfile('config.py', silent=True)

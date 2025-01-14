@@ -1,6 +1,5 @@
 import functools
 from collections.abc import Mapping
-import jwt
 
 
 from flask import (
@@ -9,10 +8,16 @@ from flask import (
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app.db import get_db
+from flask import jsonify
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import JWTManager
+from flask_jwt_extended import set_access_cookies
+from flask_jwt_extended import unset_jwt_cookies
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-
+jwt = JWTManager(app)
 @bp.route('/')
 def index():
     db = get_db()

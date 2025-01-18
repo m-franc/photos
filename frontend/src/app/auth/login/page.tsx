@@ -3,7 +3,6 @@
 import * as React from "react"
 import { useForm } from "react-hook-form"
 import { redirect } from 'next/navigation'
-import { cookies } from 'next/headers'
 
 type FormData = {
   username: string,

@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import (Flask, jsonify)
 
 from . import db
 from . import auth, blog
@@ -8,10 +8,17 @@ from flask_jwt_extended import JWTManager
 
 jwt = JWTManager()
 
+
+
 def create_app(test_config=None):
     # create and configure the app
 
     app = Flask(__name__, instance_relative_config=True)
+    @app.errorhandler(Exception)
+    def handle_exception(e):
+        print(f"Exception occurred: {str(e)}")
+        return jsonify(error=str(e)), 500
+
     app.config['JWT_TOKEN_LOCATION'] = ['cookies']
     # Only allow JWT cookies to be sent over https. In production, this
     # should likely be True
@@ -23,7 +30,7 @@ def create_app(test_config=None):
     # to the refresh endpoint. Technically this is optional, but it is in
     # your best interest to not send additional cookies in the request if
     # they aren't needed.
-    app.config['JWT_ACCESS_COOKIE_PATH'] = '/api/'
+    app.config['JWT_ACCESS_COOKIE_PATH'] = '/'
     app.config['JWT_REFRESH_COOKIE_PATH'] = '/token/refresh'
     # Enable csrf double submit protection. See this for a thorough
     # explanation: http://www.redotheweb.com/2015/11/09/api-security.html
@@ -60,5 +67,4 @@ def create_app(test_config=None):
     app.register_blueprint(auth.bp)
     app.register_blueprint(blog.bp)
     app.add_url_rule('/', endpoint="index")
-
     return app

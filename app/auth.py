@@ -2,7 +2,7 @@ import functools
 from collections.abc import Mapping
 
 from flask import (
-    Blueprint, flash, g, redirect, render_template, jsonify, request, session, url_for
+    Blueprint, make_response, flash, g, redirect, render_template, jsonify, request, session, url_for
 )
 
 from flask_jwt_extended import (
@@ -58,7 +58,6 @@ def register():
 def login():
     if request.method == 'POST':
         data = request.get_json()
-        print(data)
         username = data['username']
         password = data['password']
         db = get_db()
@@ -71,10 +70,22 @@ def login():
         elif not check_password_hash(user['password'], password):
             error = 'Incorrect password.'
         if error is None:
-            access_token = create_access_token(identity=username)
-            response = jsonify(message="Login successful!")
-            set_access_cookies(response, access_token)
-            print('OKOKOKOKOKOKOKOKOKOKOKOK !!!!!!!!')
+            access_token = create_access_token(identity=user[1])
+            response = make_response(jsonify({
+                "user": {
+                    "id": user[0],
+                    "username": user[1]
+                }
+            }))
+            response.set_cookie(
+                "access_token",
+                access_token,
+                httponly=True,
+                secure=False,
+                samesite="Lax",
+            )
+            print("Response headers:", response.headers)
+            print("Response body:", response.get_json())
             return response
         return jsonify(message="Invalid username or password"), 401
     return render_template('auth/login.html')

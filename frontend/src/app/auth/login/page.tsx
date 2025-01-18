@@ -3,6 +3,7 @@
 import * as React from "react"
 import { useForm } from "react-hook-form"
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 
 type FormData = {
   username: string,
@@ -27,6 +28,7 @@ export default function App() {
     } catch (error) {
       console.error('Erreur :', error);
     }
+    console.log(data)
     redirect('/pictures')
   })
   // firstName and lastName will have correct type

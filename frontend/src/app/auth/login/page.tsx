@@ -27,6 +27,7 @@ export default function App() {
     } catch (error) {
       console.error('Erreur :', error);
     }
+    console.log(data)
     redirect('/pictures')
   })
   // firstName and lastName will have correct type

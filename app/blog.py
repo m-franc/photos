@@ -52,6 +52,7 @@ def create():
 
         title = request.form['title']
         description = request.form['description']
+        print(title, description)
         error = None
         if not title:
             error = 'Title is required.'

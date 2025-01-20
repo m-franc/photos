@@ -1,8 +1,10 @@
 {
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
+    "@reduxjs/toolkit": "^2.5.0",
     "cookies-next": "^4.3.0",
     "react-hook-form": "^7.54.2",
+    "react-redux": "^9.2.0",
     "yup": "^0.28.5"
   }
 }

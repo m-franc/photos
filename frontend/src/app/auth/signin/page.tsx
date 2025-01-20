@@ -23,10 +23,11 @@ export default function App() {
         body: JSON.stringify(data),
       });
       console.log('Réponse :', await response.json());
+      console.log('DATA :', await data);
     } catch (error) {
       console.error('Erreur :', error);
     }
-    redirect('/pictures')
+    // redirect('/pictures')
   })
   // firstName and lastName will have correct type
 

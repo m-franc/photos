@@ -3,6 +3,8 @@
 import * as React from "react"
 import { useForm } from "react-hook-form"
 import { redirect } from 'next/navigation'
+import { useAppDispatch } from '../../redux/hook';
+import { login } from '../../redux/authSlice';
 
 type FormData = {
   username: string,
@@ -10,6 +12,10 @@ type FormData = {
 }
 
 export default function App() {
+
+
+  const dispatch = useAppDispatch();
+
   const {
     register,
     handleSubmit,
@@ -23,7 +29,9 @@ export default function App() {
         body: JSON.stringify(data),
         credentials: 'include',
       });
-      console.log('Réponse :', await response.json());
+
+      console.log('Réponse !! :', await response.json());
+      dispatch(login({ username: 'JohnDoe' }));
     } catch (error) {
       console.error('Erreur :', error);
     }

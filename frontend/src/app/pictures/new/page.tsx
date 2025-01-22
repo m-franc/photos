@@ -4,11 +4,13 @@ import * as React from "react"
 import { useController, useForm, Control } from "react-hook-form"
 import { redirect } from 'next/navigation'
 import Link from 'next/link';
+import { useAppSelector } from "@/app/redux/hook";
 
 type FormData = {
   title: string,
   description: string,
   path: File
+  author_id: string
 }
 
 type FileInputProps = {
@@ -40,13 +42,19 @@ export default function App() {
     handleSubmit,
   } = useForm<FormData>()
 
+  const userId = useAppSelector((state) => state.auth.id);
+  console.log(userId);
 
   const onSubmit = handleSubmit( async (data) => {
+
     try {
+
+
       const formData = new FormData();
       formData.append('title', data.title)
       formData.append('description', data.description)
       formData.append('path', data.path)
+      formData.append('author_id', userId)
       const response = await fetch('http://127.0.0.1:5000/create', {
         method: 'POST',
         body: formData,

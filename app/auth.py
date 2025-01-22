@@ -102,7 +102,8 @@ def load_logged_in_user():
 
 @bp.route('/logout')
 def logout():
-    print("BONJOUR !!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    response = make_response(jsonify({"message": "Logged out successfully"}))
+    response.set_cookie('access_token', '', expires=0, httponly=True, samesite='Lax')
     session.clear()
     return redirect(url_for('auth.register'))
 

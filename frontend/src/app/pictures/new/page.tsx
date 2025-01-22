@@ -32,7 +32,6 @@ const FileInput: React.FC<FileInputProps> = ({ name, control }) => {
 };
 
 
-
 export default function App() {
 
   const {
@@ -41,8 +40,6 @@ export default function App() {
     handleSubmit,
   } = useForm<FormData>()
 
-
-  const dispatch = useAppDispatch();
 
   const onSubmit = handleSubmit( async (data) => {
     try {
@@ -55,7 +52,6 @@ export default function App() {
         body: formData,
       });
       console.log('Réponse !!:', await response.body);
-      dispatch(login({ username: 'JohnDoe' }));
     } catch (error) {
       console.error('Erreur :', error);
     }

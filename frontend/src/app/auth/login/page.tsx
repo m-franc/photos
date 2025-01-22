@@ -11,16 +11,14 @@ type FormData = {
   password: string,
 }
 
+
 export default function App() {
-
-
-  const dispatch = useAppDispatch();
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>()
+  const dispatch = useAppDispatch();
   const onSubmit = handleSubmit( async (data) => {
     try {
       const response = await fetch('http://localhost:5000/auth/login', {
@@ -29,7 +27,7 @@ export default function App() {
         body: JSON.stringify(data),
         credentials: 'include',
       });
-
+      console.log('Réponse :', await response.json());
       console.log('Réponse !! :', await response.json());
       dispatch(login({ username: 'JohnDoe' }));
     } catch (error) {

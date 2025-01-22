@@ -52,6 +52,7 @@ def create():
 
         title = request.form['title']
         description = request.form['description']
+        author_id = request.form['author_id']
         print(title, description)
         error = None
         if not title:
@@ -79,7 +80,7 @@ def create():
             db.execute(
                 'INSERT INTO picture (title, description, path, author_id)'
                 ' VALUES (?, ?, ?, ?)',
-                (title, description, path, 1)
+                (title, description, path, author_id)
             )
             db.commit()
             return redirect(url_for('blog.index'))

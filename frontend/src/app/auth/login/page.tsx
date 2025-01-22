@@ -27,9 +27,9 @@ export default function App() {
         body: JSON.stringify(data),
         credentials: 'include',
       });
-      console.log('Réponse :', await response.json());
-      console.log('Réponse !! :', await response.json());
-      dispatch(login({ username: 'JohnDoe' }));
+      const dataUser = await response.json();
+      dispatch(login({id: dataUser.user.id,
+                      username: dataUser.user.username}));
     } catch (error) {
       console.error('Erreur :', error);
     }

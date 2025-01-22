@@ -48,8 +48,6 @@ export default function App() {
   const onSubmit = handleSubmit( async (data) => {
 
     try {
-
-
       const formData = new FormData();
       formData.append('title', data.title)
       formData.append('description', data.description)
@@ -59,7 +57,6 @@ export default function App() {
         method: 'POST',
         body: formData,
       });
-      console.log('Réponse !!:', await response.body);
     } catch (error) {
       console.error('Erreur :', error);
     }

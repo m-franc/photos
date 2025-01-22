@@ -102,6 +102,7 @@ def load_logged_in_user():
 
 @bp.route('/logout')
 def logout():
+    print("BONJOUR !!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     session.clear()
     return redirect(url_for('auth.register'))
 

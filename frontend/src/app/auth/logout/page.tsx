@@ -10,8 +10,9 @@ const Logout = () => {
   const handleLogout = async () => {
     const response = await fetch('http://localhost:5000/auth/logout', {
       credentials: 'include', // Inclure les cookies
+      method: 'POST'
     });
-
+    console.log("LA REPONSE : ", response)
     if (response.ok) {
       console.log('Déconnecté avec succès');
       dispatch(logout()); // Réinitialise l'état Redux

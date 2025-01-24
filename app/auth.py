@@ -84,8 +84,6 @@ def login():
                 secure=False,
                 samesite="Lax",
             )
-            print("Response headers:", response.headers)
-            print("Response body:", response.get_json())
             return response
         return jsonify(message="Invalid username or password"), 401
     return render_template('auth/login.html')
@@ -100,12 +98,11 @@ def load_logged_in_user():
             'SELECT * FROM user WHERE id = ?', (user_id,)
         ).fetchone()
 
-@bp.route('/logout')
+@bp.route('/logout', methods=['POST'])
 def logout():
     response = make_response(jsonify({"message": "Logged out successfully"}))
     response.set_cookie('access_token', '', expires=0, httponly=True, samesite='Lax')
-    session.clear()
-    return redirect(url_for('auth.register'))
+    return response
 
 def login_required(view):
     @functools.wraps(view)

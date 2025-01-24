@@ -9,8 +9,8 @@ import { useAppSelector } from "@/app/redux/hook";
 type FormData = {
   title: string,
   description: string,
-  path: File
-  author_id: string
+  path: File,
+  author_id: number
 }
 
 type FileInputProps = {
@@ -43,7 +43,6 @@ export default function App() {
   } = useForm<FormData>()
 
   const userId = useAppSelector((state) => state.auth.id);
-  console.log(userId);
 
   const onSubmit = handleSubmit( async (data) => {
 
@@ -57,6 +56,7 @@ export default function App() {
         method: 'POST',
         body: formData,
       });
+      console.log(response);
     } catch (error) {
       console.error('Erreur :', error);
     }

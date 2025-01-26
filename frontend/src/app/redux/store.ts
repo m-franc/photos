@@ -6,6 +6,7 @@ import { persistReducer, persistStore } from 'redux-persist';
 const persistConfig = {
   key: 'auth',
   storage,
+  whitelist: ['myReducer'],
 };
 
 const persistedReducer = persistReducer(persistConfig, authReducer);
@@ -13,7 +14,7 @@ const persistedReducer = persistReducer(persistConfig, authReducer);
 export const store = configureStore({
   reducer: {
     auth: persistedReducer,
-  }
+  },
 });
 
 // Infer the type of makeStore

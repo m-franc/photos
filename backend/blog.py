@@ -3,17 +3,17 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for
 )
 from werkzeug.exceptions import abort
-from app.auth import login_required
-from app.db import get_db
+from backend.auth import login_required
+from backend.db import get_db
 from werkzeug.utils import secure_filename
 from PIL import Image
 from PIL.ExifTags import TAGS
 import json
 
-UPLOAD_FOLDER = '/Users/maximefranc/Documents/projects/photos/app/static/pictures'
+UPLOAD_FOLDER = '/Users/maximefranc/Documents/projects/photos/backend/static/pictures'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'raf'}
 
-bp = Blueprint('blog', __name__)
+bp = Blueprint('blog', __name__, url_prefix='/auth')
 
 # bp.add_url_rule('/', endpoint='index')
 

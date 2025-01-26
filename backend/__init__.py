@@ -1,10 +1,11 @@
 import os
 from flask import (Flask, jsonify)
 
-from . import db
-from . import auth, blog
+from . import db, auth, blog
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
+from backend.auth import bp as auth_bp
+from backend.blog import bp as blog_bp
 
 jwt = JWTManager()
 
@@ -40,9 +41,8 @@ def create_app(test_config=None):
 
     jwt.init_app(app)
 
-    CORS(app, supports_credentials=True, resources={
-    r"/*": {"origins": "http://localhost:3000"}
-    })
+    CORS(app, supports_credentials=True, resources={r"/*": {"origins": "http://127.0.0.1:3000"}})
+
 
     app.config.from_mapping(
         SECRET_KEY='dev',
@@ -64,7 +64,7 @@ def create_app(test_config=None):
         pass
 
     db.init_app(app)
-    app.register_blueprint(auth.bp)
-    app.register_blueprint(blog.bp)
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(blog_bp)
     app.add_url_rule('/', endpoint="index")
     return app

@@ -46,8 +46,9 @@ def create_app(test_config=None):
                 "http://127.0.0.1:3000"   # Alternative URL
             ],
             "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-            "allow_headers": ["Content-Type", "Authorization"]
-        }
+            "allow_headers": ["Content-Type", "Authorization"],
+            "supports_credentials": True
+        },
     })
     app.config.from_mapping(
         SECRET_KEY='dev',

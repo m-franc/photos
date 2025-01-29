@@ -13,7 +13,7 @@ import json
 UPLOAD_FOLDER = '/Users/maximefranc/Documents/projects/photos/backend/static/pictures'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'raf'}
 
-bp = Blueprint('blog', __name__, url_prefix='/auth')
+bp = Blueprint('blog', __name__, url_prefix='/')
 
 # bp.add_url_rule('/', endpoint='index')
 

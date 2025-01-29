@@ -9,8 +9,6 @@ from backend.blog import bp as blog_bp
 
 jwt = JWTManager()
 
-
-
 def create_app(test_config=None):
     # create and configure the app
 
@@ -41,9 +39,16 @@ def create_app(test_config=None):
 
     jwt.init_app(app)
 
-    CORS(app, supports_credentials=True, resources={r"/*": {"origins": "http://127.0.0.1:3000"}})
-
-
+    CORS(app, resources={
+        r"/*": {  # Permet l'accès à toutes les routes
+            "origins": [
+                "http://localhost:3000",  # URL de votre frontend Next.js
+                "http://127.0.0.1:3000"   # Alternative URL
+            ],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"]
+        }
+    })
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'app.sqlite'),

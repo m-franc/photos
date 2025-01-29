@@ -28,7 +28,7 @@ interface Photo {
   username: string
 }
 
-const UPLOAD_FOLDER = 'http://127.0.0.1:5000/static/pictures/'
+const UPLOAD_FOLDER = 'http://localhost:5000/static/pictures/'
 
 export default function PhotoIndex() {
   const params = useParams<{ id: string }>()
@@ -37,7 +37,7 @@ export default function PhotoIndex() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-      fetch(`http://127.0.0.1:5000/${params.id}`) // Endpoint Flask
+      fetch(`http://localhost:5000/${params.id}`) // Endpoint Flask
           .then((response) => {
               if (!response.ok) {
                   throw new Error('Erreur réseau');

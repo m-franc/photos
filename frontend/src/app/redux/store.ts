@@ -2,10 +2,21 @@ import { configureStore } from '@reduxjs/toolkit'
 import authReducer from './authSlice'
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
+import { WebStorage } from 'redux-persist/lib/types';
+// import { serialize } from 'v8';
 
-const persistConfig = {
+interface CustomPersistConfig {
+  key: string;
+  storage: WebStorage;
+  whitelist: string[];
+  transforms?: any[]; // Si vous utilisez des transformations
+}
+
+const persistConfig: CustomPersistConfig = {
   key: 'auth',
   storage,
+  whitelist: ['auth'],
+
 };
 
 const persistedReducer = persistReducer(persistConfig, authReducer);
@@ -13,7 +24,15 @@ const persistedReducer = persistReducer(persistConfig, authReducer);
 export const store = configureStore({
   reducer: {
     auth: persistedReducer,
-  }
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE', 'persist/REGISTER'],
+        // Ignorer les vérifications de sérialisation pour certains chemins si nécessaire
+        ignoredPaths: ['auth.register']
+      },
+    }),
 });
 
 // Infer the type of makeStore

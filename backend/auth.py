@@ -5,7 +5,6 @@ from flask import (
     Blueprint, make_response, flash, g, redirect, render_template, jsonify, request, session, url_for
 )
 
-from app import app
 from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,
     create_refresh_token,
@@ -15,12 +14,11 @@ from flask_jwt_extended import (
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from app.db import get_db
-
+from backend.db import get_db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-@app.before_request
+@bp.before_request
 def load_user():
     user = get_jwt_identity().first()
     print(user)
@@ -60,7 +58,7 @@ def register():
         flash(error)
     return render_template('auth/register.html')
 
-@bp.route('/login', methods=('GET', 'POST'))
+@bp.route('/login', methods=('GET', 'POST', 'OPTIONS'))
 def login():
     if request.method == 'POST':
         data = request.get_json()

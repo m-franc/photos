@@ -70,6 +70,7 @@ export default function PhotoIndex() {
                           style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '8px' }}
                       />
                       <h3>{photo.title}</h3>
+                      <p>By {photo.username}</p>
                   </div>
 
           </div>

@@ -10,12 +10,29 @@ from PIL import Image
 from PIL.ExifTags import TAGS
 import json
 
+
+from flask_jwt_extended import (
+    JWTManager, jwt_required, create_access_token,
+    create_refresh_token,
+    get_jwt_identity, set_access_cookies,
+    set_refresh_cookies, unset_jwt_cookies, get_jwt, verify_jwt_in_request
+)
+
 UPLOAD_FOLDER = '/Users/maximefranc/Documents/projects/photos/backend/static/pictures'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'raf'}
 
 bp = Blueprint('blog', __name__, url_prefix='/')
 
 # bp.add_url_rule('/', endpoint='index')
+
+@bp.before_request
+def load_user():
+    g.user = None
+    request.cookies.get("access_token")
+    if not g.user:
+        if not request.cookies.get("access_token"):
+            return abort(404, f"YOU NEED TO LOGIN")
+        g.user = request.cookies.get("access_token")
 
 def sqlquery_to_array_of_object(query):
     columns = []

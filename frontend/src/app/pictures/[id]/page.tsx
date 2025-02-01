@@ -37,7 +37,9 @@ export default function PhotoIndex() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-      fetch(`http://localhost:5000/${params.id}`) // Endpoint Flask
+      fetch(`http://localhost:5000/${params.id}`, {
+        credentials: 'include'
+      }) // Endpoint Flask
           .then((response) => {
               if (!response.ok) {
                   throw new Error('Erreur réseau');

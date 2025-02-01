@@ -18,12 +18,6 @@ from backend.db import get_db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth/')
 
-# @bp.before_request
-# def load_user():
-#     user = get_jwt_identity().first()
-#     print(user)
-#     return user
-
 @bp.route('/')
 def index():
     db = get_db()

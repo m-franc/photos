@@ -75,13 +75,7 @@ def login():
                     "username": user[1]
                 }
             }))
-            response.set_cookie(
-                "access_token",
-                access_token,
-                httponly=True,
-                secure=False,
-                samesite="Lax",
-            )
+            set_access_cookies(response, access_token)
             return response
         return jsonify(message="Invalid username or password"), 401
     return render_template('auth/login.html')
@@ -99,7 +93,7 @@ def load_logged_in_user():
 @bp.route('/logout', methods=['POST'])
 def logout():
     response = make_response(jsonify({"message": "Logged out successfully"}))
-    response.set_cookie('access_token', '', expires=0, httponly=True, samesite='Lax')
+    unset_jwt_cookies(response)
     return response
 
 def login_required(view):

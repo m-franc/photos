@@ -34,10 +34,10 @@ def create_app(test_config=None):
     app.config['JWT_REFRESH_COOKIE_PATH'] = '/token/refresh'
     # Enable csrf double submit protection. See this for a thorough
     # explanation: http://www.redotheweb.com/2015/11/09/api-security.html
-    app.config['JWT_COOKIE_CSRF_PROTECT'] = True
+    app.config['JWT_COOKIE_CSRF_PROTECT'] = False
     # Set the secret key to sign the JWTs with
-    load_dotenv
-    app.config['JWT_SECRET_KEY'] = os.environ.get('SECRET_KEY')  # Change this!
+    load_dotenv()
+    app.config['JWT_SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
     jwt.init_app(app)
 

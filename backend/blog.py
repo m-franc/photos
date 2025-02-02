@@ -1,6 +1,6 @@
 import os
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, flash, g, redirect, render_template, request, url_for, current_app
 )
 from werkzeug.exceptions import abort
 from backend.auth import login_required
@@ -10,12 +10,12 @@ from PIL import Image
 from PIL.ExifTags import TAGS
 import json
 
-
+import jwt
 from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,
-    create_refresh_token,
+    create_refresh_token, decode_token,
     get_jwt_identity, set_access_cookies,
-    set_refresh_cookies, unset_jwt_cookies, get_jwt, verify_jwt_in_request
+    set_refresh_cookies, unset_jwt_cookies, get_jwt, verify_jwt_in_request,
 )
 
 UPLOAD_FOLDER = '/Users/maximefranc/Documents/projects/photos/backend/static/pictures'
@@ -28,9 +28,17 @@ bp = Blueprint('blog', __name__, url_prefix='/')
 @bp.before_request
 def load_user():
     g.user = None
-    access_token = request.cookies.get("access_token")
+    access_token = request.cookies.get("access_token_cookie")
+    # print("📝 Token trouvé:", access_token)
     if not access_token:
         return abort(401, f"YOU NEED TO LOGIN")
+    try:
+        verify_jwt_in_request()
+        g.user = get_jwt_identity()
+        print("User identité:", g.user)
+    except Exception as e:
+        print("❌ Erreur JWT:", str(e))
+        return abort(401, "Invalid token")
 
 def sqlquery_to_array_of_object(query):
     columns = []
@@ -68,7 +76,6 @@ def create():
         title = request.form['title']
         description = request.form['description']
         author_id = request.form['author_id']
-        print(title, description)
         error = None
         if not title:
             error = 'Title is required.'

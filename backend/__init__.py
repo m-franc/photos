@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 from flask import (Flask, jsonify)
 
 from . import db, auth, blog
@@ -35,7 +36,8 @@ def create_app(test_config=None):
     # explanation: http://www.redotheweb.com/2015/11/09/api-security.html
     app.config['JWT_COOKIE_CSRF_PROTECT'] = True
     # Set the secret key to sign the JWTs with
-    app.config['JWT_SECRET_KEY'] = 'qsdfgh'  # Change this!
+    load_dotenv
+    app.config['JWT_SECRET_KEY'] = os.environ.get('SECRET_KEY')  # Change this!
 
     jwt.init_app(app)
 

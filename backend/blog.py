@@ -28,11 +28,9 @@ bp = Blueprint('blog', __name__, url_prefix='/')
 @bp.before_request
 def load_user():
     g.user = None
-    request.cookies.get("access_token")
-    if not g.user:
-        if not request.cookies.get("access_token"):
-            return abort(404, f"YOU NEED TO LOGIN")
-        g.user = request.cookies.get("access_token")
+    access_token = request.cookies.get("access_token")
+    if not access_token:
+        return abort(401, f"YOU NEED TO LOGIN")
 
 def sqlquery_to_array_of_object(query):
     columns = []

@@ -55,6 +55,7 @@ export default function App() {
       const response = await fetch('http://localhost:5000/create', {
         method: 'POST',
         body: formData,
+        credentials: 'include'
       });
       console.log(response);
     } catch (error) {

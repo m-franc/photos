@@ -38,7 +38,7 @@ export default function PhotoIndex() {
 
   useEffect(() => {
       fetch(`http://localhost:5000/${params.id}`, {
-        credentials: 'include'
+        credentials: 'include',
       }) // Endpoint Flask
           .then((response) => {
               if (!response.ok) {
@@ -73,6 +73,7 @@ export default function PhotoIndex() {
                       />
                       <h3>{photo.title}</h3>
                       <p>By {photo.username}</p>
+                      <Link href={`/pictures/${params.id}/edit`}><h1>edit les infos de la photo</h1></Link>
                   </div>
 
           </div>

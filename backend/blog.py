@@ -34,8 +34,10 @@ def load_user():
         return abort(401, f"YOU NEED TO LOGIN")
     try:
         verify_jwt_in_request()
-        g.user = get_jwt_identity()
-        print("User identité:", g.user)
+        # g.user = get_jwt_identity()
+        claims = get_jwt()
+        g.user = claims
+        # print("User identité:", g.user['id'])
     except Exception as e:
         print("❌ Erreur JWT:", str(e))
         return abort(401, "Invalid token")

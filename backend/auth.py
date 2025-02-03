@@ -68,13 +68,9 @@ def login():
         elif not check_password_hash(user['password'], password):
             error = 'Incorrect password.'
         if error is None:
-            access_token = create_access_token(identity=user[1])
-            response = make_response(jsonify({
-                "user": {
-                    "id": user[0],
-                    "username": user[1]
-                }
-            }))
+            data_user = { 'id': user[0], 'username': user[1] }
+            access_token = create_access_token(identity=user[1], additional_claims=data_user)
+            response = make_response(jsonify({ "user": data_user }))
             set_access_cookies(response, access_token)
             return response
         return jsonify(message="Invalid username or password"), 401

@@ -56,7 +56,7 @@ export default function PhotoIndex() {
               setError(error.message);
           })
           .finally(() => setLoading(false));
-  });
+  }, [params]);
 
   if (loading) return <p>⏳ Chargement des photos...</p>;
   if (error) return <p>❌ Erreur : {error}</p>;

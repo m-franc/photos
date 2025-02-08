@@ -18,7 +18,6 @@ export default function App() {
   const params = useParams<{ id: string }>()
   const {
     register,
-    control,
     handleSubmit,
   } = useForm<FormData>()
 
@@ -40,7 +39,7 @@ export default function App() {
     } catch (error) {
       console.error('Erreur :', error);
     }
-    redirect('/pictures')
+    redirect(`/pictures/${params.id}`)
   });
   // firstName and lastName will have correct type
 

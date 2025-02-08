@@ -72,6 +72,7 @@ export default function PhotoIndex() {
                           style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '8px' }}
                       />
                       <h3>{photo.title}</h3>
+                      <h3>{photo.description}</h3>
                       <p>By {photo.username}</p>
                       <Link href={`/pictures/${params.id}/edit`}><h1>edit les infos de la photo</h1></Link>
                   </div>

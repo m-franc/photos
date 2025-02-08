@@ -18,12 +18,12 @@ export default function App() {
   const params = useParams<{ id: string }>()
   const {
     register,
-    handleSubmit,
+    handleSubmit
   } = useForm<FormData>()
 
   const userId = useAppSelector((state) => state.auth.id);
 
-  const handleSubmit = async (data) => {
+  const onSubmit = handleSubmit( async (data: FormData) => {
 
     try {
       const formData = new FormData();
@@ -46,7 +46,7 @@ export default function App() {
   return (
     <div>
       <Link href={`/pictures/`}><h1>Retour à la galerie</h1></Link>
-      <form onSubmit={handleSubmit} className="form" method="post">
+      <form onSubmit={handleSubmit(onSubmit)} className="form" method="post">
         <label>Titre</label>
         <input {...register("title")} />
         <label>Description</label>

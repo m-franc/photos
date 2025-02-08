@@ -20,13 +20,13 @@ import { useParams } from 'next/navigation'
 // }
 
 interface Photo {
-  author_id: number | undefined,
-  created: string | undefined,
-  description: string | undefined,
-  id: number | undefined,
-  path: string | undefined,
-  title: string | undefined,
-  username: string | undefined
+  author_id: number,
+  created: string,
+  description: string,
+  id: number,
+  path: string,
+  title: string,
+  username: string
 }
 
 const UPLOAD_FOLDER = 'http://localhost:5000/static/pictures/'
@@ -56,7 +56,7 @@ export default function PhotoIndex() {
               setError(error.message);
           })
           .finally(() => setLoading(false));
-  }, []);
+  });
 
   if (loading) return <p>⏳ Chargement des photos...</p>;
   if (error) return <p>❌ Erreur : {error}</p>;
@@ -66,20 +66,19 @@ export default function PhotoIndex() {
           <Link href={`/pictures/new`}><h1>Ajouter une photo</h1></Link>
           <Link href={`/pictures/`}><h1>Retour à la galerie</h1></Link>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
-                  <div key={photo?.id} style={{ textAlign: 'center' }}>
-                      <Image
-                          unoptimized
-                          src={UPLOAD_FOLDER + photo?.path}
-                          alt={photo?.title}
-                          style={{ objectFit: 'cover', borderRadius: '8px' }}
-                          width={500}
-                          height={150} />
-                      <h3>{photo?.title}</h3>
-                      <p>{photo?.description}</p>
-                      <p>By {photo?.username}</p>
-                      <Link href={`/pictures/${params.id}/edit`}><h1>edit les infos de la photo</h1></Link>
-                  </div>
-
+            <div key={photo?.id} style={{ textAlign: 'center' }}>
+              <Image
+                unoptimized
+                src={UPLOAD_FOLDER + photo?.path}
+                alt={photo?.title || 'Photo'}
+                style={{ objectFit: 'cover', borderRadius: '8px' }}
+                width={500}
+                height={150} />
+              <h3>{photo?.title}</h3>
+              <p>{photo?.description}</p>
+              <p>By {photo?.username}</p>
+              <Link href={`/pictures/${params.id}/edit`}><h1>edit les infos de la photo</h1></Link>
+            </div>
           </div>
       </div>
   );

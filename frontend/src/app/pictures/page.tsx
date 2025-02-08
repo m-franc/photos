@@ -3,6 +3,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import Image from 'next/image'
 
 // async function getImageData() {
 //   const res = await fetch('http://127.0.0.1:5000/', {
@@ -67,11 +68,13 @@ export default function PhotoIndex() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
               {photos.map((photo) => (
                   <div key={photo.id} style={{ textAlign: 'center' }}>
-                      <img
-                          src={UPLOAD_FOLDER + photo.path}
-                          alt={photo.title}
-                          style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '8px' }}
-                      />
+                      <Image
+                         unoptimized
+                         src={UPLOAD_FOLDER + photo?.path}
+                         alt={photo?.title}
+                         style={{ objectFit: 'cover', borderRadius: '8px' }}
+                         width={500}
+                         height={150} />
                       <Link href={`/pictures/${photo.id}`}><h3>{photo.title}</h3>
                       </Link>
                   </div>

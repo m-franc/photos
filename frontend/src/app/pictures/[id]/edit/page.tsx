@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from "react"
-import { useController, useForm, Control } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { redirect } from 'next/navigation'
 import Link from 'next/link';
 import { useAppSelector } from "@/app/redux/hook";
@@ -10,7 +10,7 @@ import { useParams } from 'next/navigation'
 type FormData = {
   title: string,
   description: string,
-  author_id: number
+  author_id: string
 }
 
 export default function App() {
@@ -23,7 +23,7 @@ export default function App() {
 
   const userId = useAppSelector((state) => state.auth.id);
 
-  const onSubmit = handleSubmit( async (data) => {
+  const handleSubmit = async (data) => {
 
     try {
       const formData = new FormData();
@@ -46,7 +46,7 @@ export default function App() {
   return (
     <div>
       <Link href={`/pictures/`}><h1>Retour à la galerie</h1></Link>
-      <form onSubmit={handleSubmit(onSubmit)} className="form" method="post">
+      <form onSubmit={handleSubmit} className="form" method="post">
         <label>Titre</label>
         <input {...register("title")} />
         <label>Description</label>

@@ -27,6 +27,9 @@ bp = Blueprint('blog', __name__, url_prefix='/')
 
 @bp.before_request
 def load_user():
+    print(f"⚡ Blueprint actuel : {request.blueprint}")
+    print(f"🛣️ Route actuelle : {request.path}")
+    print(f"📍 Endpoint : {request.endpoint}")
     g.user = None
     access_token = request.cookies.get("access_token_cookie")
     # print("📝 Token trouvé:", access_token)

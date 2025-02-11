@@ -1,16 +1,16 @@
 'use client'
 
 import * as React from "react"
-import { useController, useForm, Control } from "react-hook-form"
-import { redirect } from 'next/navigation'
+import { useController, useForm, Control, SubmitHandler } from "react-hook-form"
+import { useRouter } from 'next/navigation'
 import Link from 'next/link';
 import { useAppSelector } from "@/app/redux/hook";
 
 type FormData = {
-  title: string,
-  description: string,
-  path: File,
-  author_id: number
+  title: string;
+  description: string;
+  path: File;
+  author_id: string | null;
 }
 
 type FileInputProps = {
@@ -33,19 +33,20 @@ const FileInput: React.FC<FileInputProps> = ({ name, control }) => {
   );
 };
 
-
 export default function App() {
 
+  const router = useRouter()
   const {
     register,
     control,
     handleSubmit,
   } = useForm<FormData>()
 
-  const userId = useAppSelector((state) => state.auth.id);
+  const userId: string | null = useAppSelector((state) => state.auth.id);
+  if (!userId)
+    throw new Error("User ID is required");
 
-  const onSubmit = handleSubmit( async (data) => {
-
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
       const formData = new FormData();
       formData.append('title', data.title)
@@ -61,8 +62,8 @@ export default function App() {
     } catch (error) {
       console.error('Erreur :', error);
     }
-    redirect('/pictures')
-  });
+    router.push("/pictures")
+  };
   // firstName and lastName will have correct type
 
   return (

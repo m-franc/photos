@@ -9,7 +9,6 @@ interface CustomPersistConfig {
   key: string;
   storage: WebStorage;
   whitelist: string[];
-  transforms?: any[]; // Si vous utilisez des transformations
 }
 
 const persistConfig: CustomPersistConfig = {

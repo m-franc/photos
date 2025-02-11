@@ -78,6 +78,7 @@ export default function PhotoIndex() {
               <p>{photo?.description}</p>
               <p>By {photo?.username}</p>
               <Link href={`/pictures/${params.id}/edit`}><h1>edit les infos de la photo</h1></Link>
+              <Link href={`/pictures/${params.id}/delete`}><h1>supprimer la photo</h1></Link>
             </div>
           </div>
       </div>

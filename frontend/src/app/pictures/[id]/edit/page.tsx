@@ -1,30 +1,29 @@
 'use client'
-
 import * as React from "react"
-import { useForm } from "react-hook-form"
-import { redirect } from 'next/navigation'
+import { useForm, SubmitHandler } from "react-hook-form"
+import { useRouter } from 'next/navigation'
 import Link from 'next/link';
 import { useAppSelector } from "@/app/redux/hook";
 import { useParams } from 'next/navigation'
 
 type FormData = {
-  title: string,
-  description: string,
-  author_id: string
+  title: string;
+  description: string;
+  author_id: string | null;
 }
-
 export default function App() {
-
+  const router = useRouter()
   const params = useParams<{ id: string }>()
   const {
     register,
     handleSubmit
   } = useForm<FormData>()
 
-  const userId = useAppSelector((state) => state.auth.id);
+  const userId: string | null = useAppSelector((state) => state.auth.id);
+  if (!userId)
+    throw new Error("User ID is required");
 
-  const onSubmit = handleSubmit( async (data: FormData) => {
-
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
       const formData = new FormData();
       formData.append('title', data.title)
@@ -39,10 +38,9 @@ export default function App() {
     } catch (error) {
       console.error('Erreur :', error);
     }
-    redirect(`/pictures/${params.id}`)
-  });
+    router.push("/pictures")
+  };
   // firstName and lastName will have correct type
-
   return (
     <div>
       <Link href={`/pictures/`}><h1>Retour à la galerie</h1></Link>

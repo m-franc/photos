@@ -23,13 +23,14 @@ export default function App() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
+        credentials: 'include',
       });
       console.log('Réponse :', await response.json());
       console.log('DATA :', await data);
     } catch (error) {
       console.error('Erreur :', error);
     }
-    router.push("/pictures")
+    router.push("../login")
   })
   // firstName and lastName will have correct type
 

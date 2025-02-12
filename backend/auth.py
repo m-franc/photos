@@ -28,7 +28,10 @@ def index():
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
-
+        print("=== Register Debug ===")
+        print("Content-Type:", request.headers.get('Content-Type'))
+        print("Data received:", request.get_json())
+        print("====================")
         data = request.get_json()
         username = data['username']
         password = data['password']

@@ -27,9 +27,21 @@ bp = Blueprint('blog', __name__, url_prefix='/blog/')
 
 @bp.before_request
 def load_user():
-    print(f"⚡ Blueprint actuel : {request.blueprint}")
-    print(f"🛣️ Route actuelle : {request.path}")
-    print(f"📍 Endpoint : {request.endpoint}")
+    print("=== Debug Request ===")
+    print(f"Method: {request.method}")
+    print(f"Full URL: {request.url}")
+    print(f"Base URL: {request.base_url}")
+    print(f"Path: {request.path}")
+    print(f"Script Root: {request.script_root}")
+    print(f"Blueprint: {request.blueprint}")
+    print(f"Endpoint: {request.endpoint}")
+    print(f"URL Rule: {request.url_rule}")
+    print("==================")
+
+    # Vérifie si c'est vraiment une route de blog
+    if not request.path.startswith('/blog'):
+        print(f"⚠️ Warning: Non-blog route interceptée: {request.path}")
+        return None
     g.user = None
     access_token = request.cookies.get("access_token_cookie")
     # print("📝 Token trouvé:", access_token)

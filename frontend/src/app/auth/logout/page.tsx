@@ -2,9 +2,12 @@
 
 import { useAppDispatch } from '../../redux/hook';
 import { logout } from '../../redux/authSlice';
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
+
 
 const Logout = () => {
+
+  const router = useRouter()
   const dispatch = useAppDispatch();
 
   const handleLogout = async () => {
@@ -16,7 +19,7 @@ const Logout = () => {
     if (response.ok) {
       console.log('Déconnecté avec succès');
       dispatch(logout()); // Réinitialise l'état Redux
-      redirect('../login'); // Redirige vers la page de connexion
+      router.push("../login"); // Redirige vers la page de connexion
     } else {
       console.error('Erreur lors de la déconnexion');
     }

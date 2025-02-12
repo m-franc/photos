@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useForm } from "react-hook-form"
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useAppDispatch } from '../../redux/hook';
 import { login } from '../../redux/authSlice';
 
@@ -11,12 +11,12 @@ type FormData = {
   password: string,
 }
 
-
 export default function App() {
+
+  const router = useRouter()
   const {
     register,
     handleSubmit,
-    formState: { errors },
   } = useForm<FormData>()
   const dispatch = useAppDispatch();
   const onSubmit = handleSubmit( async (data) => {
@@ -34,7 +34,7 @@ export default function App() {
       console.error('Erreur :', error);
     }
     console.log(data)
-    redirect('/pictures')
+    router.push("/pictures")
   })
   // firstName and lastName will have correct type
 

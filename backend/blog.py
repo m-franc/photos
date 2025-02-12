@@ -21,12 +21,15 @@ from flask_jwt_extended import (
 UPLOAD_FOLDER = '/Users/maximefranc/Documents/projects/photos/backend/static/pictures'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'raf'}
 
-bp = Blueprint('blog', __name__, url_prefix='/')
+bp = Blueprint('blog', __name__, url_prefix='/blog/')
 
 # bp.add_url_rule('/', endpoint='index')
 
 @bp.before_request
 def load_user():
+    print(f"⚡ Blueprint actuel : {request.blueprint}")
+    print(f"🛣️ Route actuelle : {request.path}")
+    print(f"📍 Endpoint : {request.endpoint}")
     g.user = None
     access_token = request.cookies.get("access_token_cookie")
     # print("📝 Token trouvé:", access_token)

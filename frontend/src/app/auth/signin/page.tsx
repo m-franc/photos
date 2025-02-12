@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useForm } from "react-hook-form"
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 type FormData = {
   username: string,
@@ -10,10 +10,12 @@ type FormData = {
 }
 
 export default function App() {
+
+  const router = useRouter()
+
   const {
     register,
     handleSubmit,
-    formState: { errors },
   } = useForm<FormData>()
   const onSubmit = handleSubmit( async (data) => {
     try {
@@ -27,7 +29,7 @@ export default function App() {
     } catch (error) {
       console.error('Erreur :', error);
     }
-    // redirect('/pictures')
+    router.push("/pictures")
   })
   // firstName and lastName will have correct type
 

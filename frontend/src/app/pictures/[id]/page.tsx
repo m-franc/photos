@@ -38,7 +38,7 @@ export default function PhotoIndex() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-      fetch(`http://localhost:5000/${params.id}`, {
+      fetch(`http://localhost:5000/blog/${params.id}`, {
         credentials: 'include',
       }) // Endpoint Flask
           .then((response) => {

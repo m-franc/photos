@@ -21,7 +21,7 @@ from flask_jwt_extended import (
 UPLOAD_FOLDER = '/Users/maximefranc/Documents/projects/photos/backend/static/pictures'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'raf'}
 
-bp = Blueprint('blog', __name__, url_prefix='/')
+bp = Blueprint('blog', __name__, url_prefix='/blog/')
 
 # bp.add_url_rule('/', endpoint='index')
 

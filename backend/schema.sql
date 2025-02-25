@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS picture;
+DROP TABLE IF EXISTS metadata;
 
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -15,4 +16,17 @@ CREATE TABLE picture (
   description TEXT NOT NULL,
   path TEXT NOT NULL,
   FOREIGN KEY (author_id) REFERENCES user (id)
+);
+
+CREATE TABLE metadata (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  picture_id INTEGER NOT NULL,
+  camera TEXT NOT NULL,
+  lens TEXT NOT NULL,
+  date TEXT NOT NULL,
+  iso TEXT NOT NULL,
+  speed TEXT NOT NULL,
+  zoom TEXT NOT NULL,
+  aperture TEXT NOT NULL,
+  FOREIGN KEY (picture_id) REFERENCES picture (id)
 );

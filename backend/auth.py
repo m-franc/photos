@@ -18,20 +18,10 @@ from backend.db import get_db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth/')
 
-@bp.route('/')
-def index():
-    db = get_db()
-    users = db.execute("SELECT * FROM user").fetchall()
-    pictures = db.execute("SELECT * FROM picture").fetchall()
-    return render_template('auth/index.html', users=users, pictures=pictures)
-
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
-        print("=== Register Debug ===")
-        print("Content-Type:", request.headers.get('Content-Type'))
-        print("Data received:", request.get_json())
-        print("====================")
+
         data = request.get_json()
         username = data['username']
         password = data['password']
@@ -53,7 +43,6 @@ def register():
             else:
                 return redirect(url_for("auth.login"))
         flash(error)
-    return render_template('auth/register.html')
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
@@ -77,7 +66,6 @@ def login():
             set_access_cookies(response, access_token)
             return response
         return jsonify(message="Invalid username or password"), 401
-    return render_template('auth/login.html')
 
 @bp.before_app_request
 def load_logged_in_user():

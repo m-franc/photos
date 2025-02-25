@@ -27,17 +27,6 @@ bp = Blueprint('blog', __name__, url_prefix='/blog/')
 
 @bp.before_request
 def load_user():
-    print("=== Debug Request ===")
-    print(f"Method: {request.method}")
-    print(f"Full URL: {request.url}")
-    print(f"Base URL: {request.base_url}")
-    print(f"Path: {request.path}")
-    print(f"Script Root: {request.script_root}")
-    print(f"Blueprint: {request.blueprint}")
-    print(f"Endpoint: {request.endpoint}")
-    print(f"URL Rule: {request.url_rule}")
-    print("==================")
-
     # Vérifie si c'est vraiment une route de blog
     if not request.path.startswith('/blog'):
         print(f"⚠️ Warning: Non-blog route interceptée: {request.path}")
@@ -86,7 +75,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @bp.route('/create', methods=['GET', 'POST'])
-# @login_required
+@login_required
 def create():
     if request.method == 'POST':
 
@@ -122,8 +111,6 @@ def create():
                 (title, description, path, author_id)
             )
             db.commit()
-            return redirect(url_for('blog.index'))
-    return render_template('blog/create.html')
 
 def get_picture(id, show, check_author=True):
     picture = get_db().execute(
@@ -178,8 +165,6 @@ def update(id):
                 (title, description, id)
             )
             db.commit()
-            return redirect(url_for('blog.index'))
-    return render_template('blog/update.html', picture=picture)
 
 @bp.route('/<id>/delete', methods=['POST'])
 @login_required
@@ -188,4 +173,3 @@ def delete(id):
     db = get_db()
     db.execute('DELETE FROM picture WHERE id = ?', (id,))
     db.commit()
-    return redirect(url_for('blog.index'))

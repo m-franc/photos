@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 from PIL import Image
 from PIL.ExifTags import TAGS
 import json
+from exif import Image
 
 import jwt
 from flask_jwt_extended import (
@@ -72,20 +73,19 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-def insert_metadata(db, picture_id, metadata):
+def insert_metadata(db, picture_id, image):
     print("PICTURE ID", picture_id)
-    print("LES DATAS", metadata)
+    print("LES DATAS !!!! ", dir(image))
     # db.execute(
     #             'INSERT INTO metadata (title, description, path, author_id)'
     #             ' VALUES (?, ?, ?, ?)',
     #             (title, description, path, author_id)
     #         )
 
-def get_metadata(path):
-    image = Image.open(UPLOAD_FOLDER + '/' + path)
-    metadata = image._getexif()
-    image.close()
-    return metadata
+def get_image_information(path):
+    with open(UPLOAD_FOLDER + '/' + path, 'rb') as image_file:
+        image = Image(image_file)
+    return image
 
 @bp.route('/create', methods=['GET', 'POST'])
 # @login_required
@@ -122,9 +122,9 @@ def create():
                 (title, description, path, author_id)
             )
             db.commit()
-            metadata = get_metadata(path)
+            image = get_image_information(path)
             picture_id = cursor.lastrowid
-            insert_metadata(db, picture_id, metadata)
+            insert_metadata(db, picture_id, image)
 
 def get_picture(id, show, check_author=True):
     picture = get_db().execute(

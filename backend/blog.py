@@ -75,7 +75,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @bp.route('/create', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def create():
     if request.method == 'POST':
 
@@ -111,6 +111,8 @@ def create():
                 (title, description, path, author_id)
             )
             db.commit()
+            return redirect(url_for('blog.index'))
+    return render_template('blog/create.html')
 
 def get_picture(id, show, check_author=True):
     picture = get_db().execute(
@@ -165,6 +167,8 @@ def update(id):
                 (title, description, id)
             )
             db.commit()
+            return redirect(url_for('blog.index'))
+    return render_template('blog/update.html', picture=picture)
 
 @bp.route('/<id>/delete', methods=['POST'])
 @login_required
@@ -173,3 +177,4 @@ def delete(id):
     db = get_db()
     db.execute('DELETE FROM picture WHERE id = ?', (id,))
     db.commit()
+    return redirect(url_for('blog.index'))

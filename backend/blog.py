@@ -116,14 +116,12 @@ def create():
                 path = filename
             db = get_db()
 
-            db.execute(
+            cursor = db.execute(
                 'INSERT INTO picture (title, description, path, author_id)'
                 ' VALUES (?, ?, ?, ?)',
                 (title, description, path, author_id)
             )
-
             db.commit()
-            cursor = db.cursor()
             metadata = get_metadata(path)
             picture_id = cursor.lastrowid
             insert_metadata(db, picture_id, metadata)

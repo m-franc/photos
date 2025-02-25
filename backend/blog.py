@@ -48,7 +48,6 @@ def load_user():
 
 def sqlquery_to_array_of_object(query):
     columns = []
-
     rows = query.fetchall()
     data = []
     for col in query.description:
@@ -69,10 +68,24 @@ def index():
     data = sqlquery_to_array_of_object(pictures)
     return json.dumps(data, indent=4, sort_keys=True, default=str)
 
-
-
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+def insert_metadata(db, picture_id, metadata):
+    print("PICTURE ID", picture_id)
+    print("LES DATAS", metadata)
+    # db.execute(
+    #             'INSERT INTO metadata (title, description, path, author_id)'
+    #             ' VALUES (?, ?, ?, ?)',
+    #             (title, description, path, author_id)
+    #         )
+
+def get_metadata(path):
+    image = Image.open(UPLOAD_FOLDER + '/' + path)
+    metadata = image._getexif()
+    image.close()
+    return metadata
 
 @bp.route('/create', methods=['GET', 'POST'])
 # @login_required
@@ -90,13 +103,10 @@ def create():
         if error is not None:
             flash(error)
         else:
-            # check if the post request has the file part
             if 'path' not in request.files:
                 flash('No file part')
                 return redirect(url_for('blog.index'))
             file = request.files.get("path")
-            # If the user does not select a file, the browser submits an
-            # empty file without a filename.
             if file.filename == '':
                 flash('No selected file')
                 return redirect(url_for('blog.index'))
@@ -105,14 +115,18 @@ def create():
                 file.save(os.path.join(UPLOAD_FOLDER, filename))
                 path = filename
             db = get_db()
+
             db.execute(
                 'INSERT INTO picture (title, description, path, author_id)'
                 ' VALUES (?, ?, ?, ?)',
                 (title, description, path, author_id)
             )
+
             db.commit()
-            return redirect(url_for('blog.index'))
-    return render_template('blog/create.html')
+            cursor = db.cursor()
+            metadata = get_metadata(path)
+            picture_id = cursor.lastrowid
+            insert_metadata(db, picture_id, metadata)
 
 def get_picture(id, show, check_author=True):
     picture = get_db().execute(
@@ -143,7 +157,6 @@ def show(id):
         "username": picture[6]
        }
     return json.dumps(data, indent=4, sort_keys=True, default=str)
-
 
 @bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required

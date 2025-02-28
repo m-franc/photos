@@ -28,12 +28,12 @@ bp = Blueprint('blog', __name__, url_prefix='/blog/')
 @bp.before_request
 def load_user():
     # Vérifie si c'est vraiment une route de blog
-    if not request.path.startswith('/blog'):
+    if request.path.startswith('/blog/update'):
         print(f"⚠️ Warning: Non-blog route interceptée: {request.path}")
         return None
     g.user = None
     access_token = request.cookies.get("access_token_cookie")
-    print("📝 Token trouvé:", access_token)
+    # print("📝 Token trouvé:", access_token)
     if not access_token:
         return abort(401, f"YOU NEED TO LOGIN")
     try:
@@ -68,28 +68,51 @@ def index():
     data = sqlquery_to_array_of_object(pictures)
     return json.dumps(data, indent=4, sort_keys=True, default=str)
 
+@bp.route('/allmetadatas')
+def allmetadatas():
+    db = get_db()
+    metadatas = db.execute(
+        'SELECT picture_id, date, brightness, speed, zoom, aperture'
+        ' FROM metadata'
+        ' ORDER BY created DESC'
+    )
+    # Create the columns of the json statam
+    data = sqlquery_to_array_of_object(metadatas)
+    return json.dumps(data, indent=4, sort_keys=True, default=str)
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-def insert_metadata(db, picture_id, image):
-    return 0
-    # db.execute(
-    #             'INSERT INTO metadata (title, description, path, author_id)'
-    #             ' VALUES (?, ?, ?, ?)',
-    #             (title, description, path, author_id)
-    #         )
+def insert_metadata(picture_id, metadata):
+    print("PICTURE ID OOOH : ", picture_id)
+    print("UN ELEMENT : ", metadata["brightness"])
+    db = get_db()
+    print("BONJOUR CEST PARTI")
+    db.execute(
+                'INSERT INTO metadata (picture_id, date, brightness, speed, zoom, aperture)'
+                ' VALUES (?, ?, ?, ?, ?, ?)',
+                (picture_id,
+                 metadata["date"],
+                 metadata["brightness"],
+                 metadata["speed"],
+                 metadata["zoom"],
+                 metadata["aperture"])
+            )
+    db.commit()
+    print("NORMALEMENT CEST BON")
+    return None
 
 def get_image_information(path):
     with open(UPLOAD_FOLDER + '/' + path, 'rb') as image_file:
         image_bytes = image_file.read()
     meta_data = Image(image_bytes)
-    print("LISTE OF DATA : ", dir(meta_data))
-    print("DATETIME ORIGINAL : ", meta_data.datetime_original)
-    print("LUMIERE : ", meta_data.brightness_value)
-    print("SPEED : ", meta_data.exposure_time)
-    print("ZOOM : ", meta_data.focal_length)
-    print("APETRURE : ", meta_data.f_number)
+
+    return {"date": meta_data.datetime_original,
+            "brightness": meta_data.brightness_value,
+            "speed": meta_data.exposure_time,
+            "zoom": meta_data.focal_length,
+            "aperture": meta_data.f_number}
 
 
 
@@ -130,9 +153,11 @@ def create():
                 (title, description, path, author_id)
             )
             db.commit()
-            image = get_image_information(path)
+            image_metadata = get_image_information(path)
             picture_id = cursor.lastrowid
-            insert_metadata(db, picture_id, image)
+            insert_metadata(picture_id, image_metadata)
+        return json.dumps({"success": True, "message": "Post created successfully"}), 201
+    return None
 
 def get_picture(id, show, check_author=True):
     picture = get_db().execute(

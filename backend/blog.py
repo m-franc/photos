@@ -6,10 +6,9 @@ from werkzeug.exceptions import abort
 from backend.auth import login_required
 from backend.db import get_db
 from werkzeug.utils import secure_filename
-from PIL import Image
+from exif import Image
 from PIL.ExifTags import TAGS
 import json
-from exif import Image
 
 import jwt
 from flask_jwt_extended import (
@@ -75,7 +74,8 @@ def allowed_file(filename):
 
 def insert_metadata(db, picture_id, image):
     print("PICTURE ID", picture_id)
-    print("LES DATAS !!!! ", dir(image))
+    for elem in dir(image):
+        print("elem : ", elem)
     # db.execute(
     #             'INSERT INTO metadata (title, description, path, author_id)'
     #             ' VALUES (?, ?, ?, ?)',
@@ -84,8 +84,19 @@ def insert_metadata(db, picture_id, image):
 
 def get_image_information(path):
     with open(UPLOAD_FOLDER + '/' + path, 'rb') as image_file:
-        image = Image(image_file)
-    return image
+        image_bytes = image_file.read()
+    meta_data = Image(image_bytes)
+    print("LISTE OF DATA : ", dir(meta_data))
+    print("LUMIERE : ", meta_data.brightness_value)
+    print("CAMERA : ", meta_data.model)
+    print("LUMIERE : ", meta_data.brightness_value)
+    print("LUMIERE : ", meta_data.brightness_value)
+    print("LUMIERE : ", meta_data.brightness_value)
+    print("LUMIERE : ", meta_data.brightness_value)
+    print("LUMIERE : ", meta_data.brightness_value)
+
+
+
 
 @bp.route('/create', methods=['GET', 'POST'])
 # @login_required

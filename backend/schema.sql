@@ -21,10 +21,8 @@ CREATE TABLE picture (
 CREATE TABLE metadata (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   picture_id INTEGER NOT NULL,
-  camera TEXT NOT NULL,
-  lens TEXT NOT NULL,
   date TEXT NOT NULL,
-  iso TEXT NOT NULL,
+  brightness TEXT NOT NULL,
   speed TEXT NOT NULL,
   zoom TEXT NOT NULL,
   aperture TEXT NOT NULL,

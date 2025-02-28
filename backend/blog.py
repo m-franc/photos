@@ -33,7 +33,7 @@ def load_user():
         return None
     g.user = None
     access_token = request.cookies.get("access_token_cookie")
-    # print("📝 Token trouvé:", access_token)
+    print("📝 Token trouvé:", access_token)
     if not access_token:
         return abort(401, f"YOU NEED TO LOGIN")
     try:
@@ -73,9 +73,7 @@ def allowed_file(filename):
 
 
 def insert_metadata(db, picture_id, image):
-    print("PICTURE ID", picture_id)
-    for elem in dir(image):
-        print("elem : ", elem)
+    return 0
     # db.execute(
     #             'INSERT INTO metadata (title, description, path, author_id)'
     #             ' VALUES (?, ?, ?, ?)',
@@ -87,19 +85,18 @@ def get_image_information(path):
         image_bytes = image_file.read()
     meta_data = Image(image_bytes)
     print("LISTE OF DATA : ", dir(meta_data))
+    print("DATETIME ORIGINAL : ", meta_data.datetime_original)
     print("LUMIERE : ", meta_data.brightness_value)
-    print("CAMERA : ", meta_data.model)
-    print("LUMIERE : ", meta_data.brightness_value)
-    print("LUMIERE : ", meta_data.brightness_value)
-    print("LUMIERE : ", meta_data.brightness_value)
-    print("LUMIERE : ", meta_data.brightness_value)
-    print("LUMIERE : ", meta_data.brightness_value)
+    print("SPEED : ", meta_data.exposure_time)
+    print("ZOOM : ", meta_data.focal_length)
+    print("APETRURE : ", meta_data.f_number)
+
 
 
 
 
 @bp.route('/create', methods=['GET', 'POST'])
-# @login_required
+@login_required
 def create():
     if request.method == 'POST':
 

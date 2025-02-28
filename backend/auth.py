@@ -47,14 +47,17 @@ def register():
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
+
         data = request.get_json()
         username = data['username']
         password = data['password']
         db = get_db()
         error = None
+
         user = db.execute(
             'SELECT * FROM user WHERE username = ?', (username,)
         ).fetchone()
+
         if user is None:
             error = 'Incorrect username.'
         elif not check_password_hash(user['password'], password):
@@ -87,6 +90,6 @@ def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
-            return redirect(url_for('auth.login'))
+            return jsonify(message="YOU NEED TO BE CONNECTED"), 401
         return view(**kwargs)
     return wrapped_view

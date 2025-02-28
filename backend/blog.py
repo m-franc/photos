@@ -6,7 +6,7 @@ from werkzeug.exceptions import abort
 from backend.auth import login_required
 from backend.db import get_db
 from werkzeug.utils import secure_filename
-from PIL import Image
+from exif import Image
 from PIL.ExifTags import TAGS
 import json
 
@@ -28,7 +28,7 @@ bp = Blueprint('blog', __name__, url_prefix='/blog/')
 @bp.before_request
 def load_user():
     # Vérifie si c'est vraiment une route de blog
-    if not request.path.startswith('/blog'):
+    if request.path.startswith('/blog/update'):
         print(f"⚠️ Warning: Non-blog route interceptée: {request.path}")
         return None
     g.user = None
@@ -48,7 +48,6 @@ def load_user():
 
 def sqlquery_to_array_of_object(query):
     columns = []
-
     rows = query.fetchall()
     data = []
     for col in query.description:
@@ -69,13 +68,58 @@ def index():
     data = sqlquery_to_array_of_object(pictures)
     return json.dumps(data, indent=4, sort_keys=True, default=str)
 
-
+@bp.route('/allmetadatas')
+def allmetadatas():
+    db = get_db()
+    metadatas = db.execute(
+        'SELECT picture_id, date, brightness, speed, zoom, aperture'
+        ' FROM metadata'
+        ' ORDER BY created DESC'
+    )
+    # Create the columns of the json statam
+    data = sqlquery_to_array_of_object(metadatas)
+    return json.dumps(data, indent=4, sort_keys=True, default=str)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
+def insert_metadata(picture_id, metadata):
+    print("PICTURE ID OOOH : ", picture_id)
+    print("UN ELEMENT : ", metadata["brightness"])
+    db = get_db()
+    print("BONJOUR CEST PARTI")
+    db.execute(
+                'INSERT INTO metadata (picture_id, date, brightness, speed, zoom, aperture)'
+                ' VALUES (?, ?, ?, ?, ?, ?)',
+                (picture_id,
+                 metadata["date"],
+                 metadata["brightness"],
+                 metadata["speed"],
+                 metadata["zoom"],
+                 metadata["aperture"])
+            )
+    db.commit()
+    print("NORMALEMENT CEST BON")
+    return None
+
+def get_image_information(path):
+    with open(UPLOAD_FOLDER + '/' + path, 'rb') as image_file:
+        image_bytes = image_file.read()
+    meta_data = Image(image_bytes)
+
+    return {"date": meta_data.datetime_original,
+            "brightness": meta_data.brightness_value,
+            "speed": meta_data.exposure_time,
+            "zoom": meta_data.focal_length,
+            "aperture": meta_data.f_number}
+
+
+
+
+
 @bp.route('/create', methods=['GET', 'POST'])
-# @login_required
+@login_required
 def create():
     if request.method == 'POST':
 
@@ -90,13 +134,10 @@ def create():
         if error is not None:
             flash(error)
         else:
-            # check if the post request has the file part
             if 'path' not in request.files:
                 flash('No file part')
                 return redirect(url_for('blog.index'))
             file = request.files.get("path")
-            # If the user does not select a file, the browser submits an
-            # empty file without a filename.
             if file.filename == '':
                 flash('No selected file')
                 return redirect(url_for('blog.index'))
@@ -105,14 +146,18 @@ def create():
                 file.save(os.path.join(UPLOAD_FOLDER, filename))
                 path = filename
             db = get_db()
-            db.execute(
+
+            cursor = db.execute(
                 'INSERT INTO picture (title, description, path, author_id)'
                 ' VALUES (?, ?, ?, ?)',
                 (title, description, path, author_id)
             )
             db.commit()
-            return redirect(url_for('blog.index'))
-    return render_template('blog/create.html')
+            image_metadata = get_image_information(path)
+            picture_id = cursor.lastrowid
+            insert_metadata(picture_id, image_metadata)
+        return json.dumps({"success": True, "message": "Post created successfully"}), 201
+    return None
 
 def get_picture(id, show, check_author=True):
     picture = get_db().execute(
@@ -143,7 +188,6 @@ def show(id):
         "username": picture[6]
        }
     return json.dumps(data, indent=4, sort_keys=True, default=str)
-
 
 @bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required

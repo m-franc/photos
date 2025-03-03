@@ -64,6 +64,7 @@ def index():
         ' FROM picture p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC'
     )
+
     # Create the columns of the json statam
     data = sqlquery_to_array_of_object(pictures)
     return json.dumps(data, indent=4, sort_keys=True, default=str)
@@ -71,12 +72,12 @@ def index():
 @bp.route('/allmetadatas')
 def allmetadatas():
     db = get_db()
+    print("BONJOUR")
     metadatas = db.execute(
-        'SELECT picture_id, date, brightness, speed, zoom, aperture'
-        ' FROM metadata'
-        ' ORDER BY created DESC'
+        'SELECT * FROM metadata'
     )
     # Create the columns of the json statam
+
     data = sqlquery_to_array_of_object(metadatas)
     return json.dumps(data, indent=4, sort_keys=True, default=str)
 

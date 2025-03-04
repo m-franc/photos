@@ -60,7 +60,8 @@ def sqlquery_to_array_of_object(query):
 def index():
     db = get_db()
     pictures = db.execute(
-        'SELECT p.id, title, description, created, path, author_id, username'
+        'SELECT p.id, title, description, created, path, author_id, username,'
+        ' m.brightness, m.date, m.aperture, m.zoom, m.speed'
         ' FROM picture p JOIN user u ON p.author_id = u.id'
         ' JOIN metadata m ON p.id = m.picture_id'
         ' ORDER BY m.date DESC'

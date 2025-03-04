@@ -8,6 +8,8 @@ from flask_jwt_extended import JWTManager
 from backend.auth import bp as auth_bp
 from backend.blog import bp as blog_bp
 
+from datetime import timedelta
+
 jwt = JWTManager()
 
 def create_app(test_config=None):
@@ -40,6 +42,7 @@ def create_app(test_config=None):
     # your best interest to not send additional cookies in the request if
     # they aren't needed.
     app.config['JWT_ACCESS_COOKIE_PATH'] = '/'
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=24)
     app.config['JWT_REFRESH_COOKIE_PATH'] = '/token/refresh'
     # Enable csrf double submit protection. See this for a thorough
     # explanation: http://www.redotheweb.com/2015/11/09/api-security.html

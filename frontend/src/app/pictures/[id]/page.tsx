@@ -26,7 +26,12 @@ interface Photo {
   id: number,
   path: string,
   title: string,
-  username: string
+  username: string,
+  speed: string,
+  brightness: string,
+  aperture: string,
+  zoom: string,
+  date: string
 }
 
 const UPLOAD_FOLDER = 'http://localhost:5000/static/pictures/'
@@ -76,7 +81,14 @@ export default function PhotoIndex() {
                 height={150} />
               <h3>{photo?.title}</h3>
               <p>{photo?.description}</p>
-              <p>By {photo?.username}</p>
+              <p>By {photo?.username} on {photo?.date}</p>
+              <h2>METADATAS</h2>
+              <ul>
+                <li>Vitesse : {photo?.speed}</li>
+                <li>Lumière : {photo?.brightness}</li>
+                <li>Ouverture : {photo?.aperture}</li>
+                <li>Focale : {photo?.zoom}</li>
+              </ul>
               <Link href={`/pictures/${params.id}/edit`}><h1>edit les infos de la photo</h1></Link>
               <Link href={`/pictures/${params.id}/delete`}><h1>supprimer la photo</h1></Link>
             </div>

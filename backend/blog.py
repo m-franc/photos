@@ -64,7 +64,7 @@ def index():
         ' m.brightness, m.date, m.aperture, m.zoom, m.speed'
         ' FROM picture p JOIN user u ON p.author_id = u.id'
         ' JOIN metadata m ON p.id = m.picture_id'
-        ' ORDER BY m.date DESC'
+        ' ORDER BY m.date ASC'
     )
 
     # Create the columns of the json statam
@@ -163,8 +163,10 @@ def create():
 
 def get_picture(id, show, check_author=True):
     picture = get_db().execute(
-        'SELECT p.id, title, description, path, created, author_id, username'
+        'SELECT p.id, title, description, path, created, author_id, username,'
+        ' m.speed, m.zoom, m.brightness, m.aperture, m.date'
         ' FROM picture p JOIN user u ON p.author_id = u.id'
+        ' JOIN metadata m ON p.id = m.picture_id'
         ' WHERE p.id = ?',
         (id,)
     ).fetchone()
@@ -180,6 +182,8 @@ def show(id):
     picture = get_picture(id, 1)
     # image = Image.open(UPLOAD_FOLDER + '/' + picture['path'])
     # exifdata = image._getexif()
+    for elem in picture:
+        print("ELEM : ", elem)
     data = {
         "id": picture[0],
         "title": picture[1],
@@ -187,7 +191,12 @@ def show(id):
         "path": picture[3],
         "created": picture[4],
         "author_id": picture[5],
-        "username": picture[6]
+        "username": picture[6],
+        "speed": picture[7],
+        "zoom": picture[8],
+        "brightness": picture[9],
+        "aperture": picture[10],
+        "date": picture[11]
        }
     return json.dumps(data, indent=4, sort_keys=True, default=str)
 

@@ -3,11 +3,10 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for, current_app
 )
 from werkzeug.exceptions import abort
-from backend.auth import login_required
-from backend.db import get_db
+from auth import login_required
+from db import get_db
 from werkzeug.utils import secure_filename
 from exif import Image
-from PIL.ExifTags import TAGS
 import json
 
 import jwt

@@ -14,14 +14,13 @@ from flask_jwt_extended import (
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from backend.db import get_db
+from db import get_db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth/')
 
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
-
         data = request.get_json()
         username = data['username']
         password = data['password']

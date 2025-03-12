@@ -2,11 +2,13 @@ import os
 from dotenv import load_dotenv
 from flask import (Flask, jsonify)
 
-from . import db, auth, blog
+import db
+import auth
+import blog
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-from backend.auth import bp as auth_bp
-from backend.blog import bp as blog_bp
+from auth import bp as auth_bp
+from blog import bp as blog_bp
 
 from datetime import timedelta
 

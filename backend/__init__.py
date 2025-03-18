@@ -59,6 +59,7 @@ def create_app(test_config=None):
         r"/*": {  # Permet l'accès à toutes les routes
             "origins": [
                 "http://localhost:3000",  # URL de votre frontend Next.js
+                "http://frontend:3000", # URL du container docker
                 "http://127.0.0.1:3000"   # Alternative URL
             ],
             "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],

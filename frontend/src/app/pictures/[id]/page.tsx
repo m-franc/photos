@@ -34,7 +34,7 @@ interface Photo {
   date: string
 }
 
-const UPLOAD_FOLDER = 'http://backend:8000/static/pictures/'
+const UPLOAD_FOLDER = 'http://backend-server-1:8000/static/pictures/'
 
 export default function PhotoIndex() {
   const params = useParams<{ id: string }>()
@@ -43,7 +43,7 @@ export default function PhotoIndex() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-      fetch(`http://backend:8000/blog/${params.id}`, {
+      fetch(`http://backend-server-1:8000/blog/${params.id}`, {
         credentials: 'include',
       }) // Endpoint Flask
           .then((response) => {

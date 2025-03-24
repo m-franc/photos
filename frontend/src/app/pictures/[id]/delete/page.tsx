@@ -10,7 +10,7 @@ export default function App() {
   // const userId = useAppSelector((state) => state.auth.id); will be use letter to verifying if the user is the author of the picture !
   useEffect(() => {
     try {
-      const response = fetch(`http://backend-server-1:8000/blog/${params.id}/delete`, {
+      const response = fetch(`http://localhost:8000/blog/${params.id}/delete`, {
         method: 'POST',
         body: params.id,
         credentials: 'include'

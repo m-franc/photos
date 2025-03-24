@@ -67,11 +67,17 @@ def create_app(test_config=None):
             "supports_credentials": True
         },
     })
+    instance_path = app.instance_path
+    db_path = os.path.join(instance_path, 'app.sqlite')
     app.config.from_mapping(
         SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
+        DATABASE=os.path.join(instance_path, 'app.sqlite'),
     )
-
+    print(f"Trying to access database at: {db_path}")
+    print(f"Database file exists: {os.path.exists(db_path)}")
+    print(f"Database file is readable: {os.access(db_path, os.R_OK)}")
+    print(f"Database file is writable: {os.access(db_path, os.W_OK)}")
+    print(f"Instance path: {instance_path}")
 
     if test_config is None:
         # load the instance config, if it exists, when not testing

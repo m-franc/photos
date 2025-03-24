@@ -53,7 +53,7 @@ export default function App() {
       formData.append('description', data.description)
       formData.append('path', data.path)
       formData.append('author_id', userId)
-      const response = await fetch('http://backend-server-1:8000/blog/create', {
+      const response = await fetch('http://localhost:8000/blog/create', {
         method: 'POST',
         body: formData,
         credentials: 'include'

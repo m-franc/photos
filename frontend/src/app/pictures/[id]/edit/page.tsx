@@ -29,7 +29,7 @@ export default function App() {
       formData.append('title', data.title)
       formData.append('description', data.description)
       formData.append('author_id', userId)
-      const response = await fetch(`http://backend:8000/blog/${params.id}/update`, {
+      const response = await fetch(`http://localhost:8000/blog/${params.id}/update`, {
         method: 'POST',
         body: formData,
         credentials: 'include'

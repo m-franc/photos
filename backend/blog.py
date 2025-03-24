@@ -27,6 +27,7 @@ bp = Blueprint('blog', __name__, url_prefix='/blog/')
 @bp.before_request
 def load_user():
     # Vérifie si c'est vraiment une route de blog
+    print("BONJOUR !!!!!!!")
     if request.path.startswith('/blog/update'):
         print(f"⚠️ Warning: Non-blog route interceptée: {request.path}")
         return None

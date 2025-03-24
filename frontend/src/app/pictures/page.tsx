@@ -27,7 +27,7 @@ interface Photo {
   username: string
 }
 
-const UPLOAD_FOLDER = 'http://localhost:5000/static/pictures/'
+const UPLOAD_FOLDER = 'http://localhost:8000/static/pictures/'
 
 export default function PhotoIndex() {
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -35,7 +35,7 @@ export default function PhotoIndex() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-      fetch('http://localhost:5000/blog/', {
+      fetch('http://localhost:8000/blog/', {
         credentials: 'include'
       }) // Endpoint Flask
           .then((response) => {

@@ -42,11 +42,14 @@ def register():
             else:
                 return redirect(url_for("auth.login"))
         flash(error)
+    return jsonify({"success": False, "error": "No view on this regsiter route, pls use you  client-side app"}), 404
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
-
+        print("Requête de login reçue")
+        print("Headers:", request.headers)
+        print("Body:", request.get_json())
         data = request.get_json()
         username = data['username']
         password = data['password']
@@ -68,6 +71,7 @@ def login():
             set_access_cookies(response, access_token)
             return response
         return jsonify(message="Invalid username or password"), 401
+    return jsonify({"success": False, "error": "No view on this login route, pls use you  client-side app"}), 404
 
 @bp.before_app_request
 def load_logged_in_user():

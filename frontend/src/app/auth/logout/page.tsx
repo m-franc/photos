@@ -11,7 +11,7 @@ const Logout = () => {
   const dispatch = useAppDispatch();
 
   const handleLogout = async () => {
-    const response = await fetch('http://backend:8000/auth/logout', {
+    const response = await fetch('http://localhost:8000/auth/logout', {
       credentials: 'include', // Inclure les cookies
       method: 'POST'
     });

@@ -8,11 +8,30 @@
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
 services:
-  server:
-    build:
-      context: .
+  frontend:
+    build: ./frontend
     ports:
-      - 8000:8000
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app           # Monte votre code source pour le hot reloading
+      - /app/node_modules         # Préserve les node_modules du conteneur
+    depends_on:
+      - backend
+    networks:
+      - photos-network
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./instance:/instance
+      - ./backend:/app
+    networks:
+      - photos-network
+
+networks:
+  photos-network:
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
@@ -46,4 +65,3 @@ services:
 # secrets:
 #   db-password:
 #     file: db/password.txt
-

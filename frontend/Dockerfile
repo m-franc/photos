@@ -36,9 +36,12 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=cache,target=/root/.npm \
     npm ci
 # Copy the rest of the source files into the image.
-COPY . .
-# Run the build script.
+# Copier seulement les fichiers nécessaires à l'installation des dépendances
+COPY package*.json ./
 RUN npm install
+# Le reste du code sera monté via volume
+# Run the build script.
+
 
 ################################################################################
 # Create a new stage to run the application with minimal runtime dependencies

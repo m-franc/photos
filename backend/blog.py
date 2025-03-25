@@ -17,7 +17,8 @@ from flask_jwt_extended import (
     set_refresh_cookies, unset_jwt_cookies, get_jwt, verify_jwt_in_request,
 )
 
-UPLOAD_FOLDER = '/Users/maximefranc/Documents/projects/photos/backend/static/pictures'
+
+UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'static', 'pictures')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'raf'}
 
 bp = Blueprint('blog', __name__, url_prefix='/blog/')
@@ -106,7 +107,7 @@ def insert_metadata(picture_id, metadata):
     return None
 
 def get_image_information(path):
-    with open(UPLOAD_FOLDER + '/' + path, 'rb') as image_file:
+    with open(os.path.join(UPLOAD_FOLDER, path), 'rb') as image_file:
         image_bytes = image_file.read()
     meta_data = Image(image_bytes)
 
@@ -123,8 +124,20 @@ def get_image_information(path):
 @bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
+    try:
+        # Votre code d'upload actuel
+        print("Chemin d'upload:", UPLOAD_FOLDER)
+        print("Fichier reçu:", request.files)
+        # etc.
+    except Exception as e:
+        print(f"Erreur détaillée: {str(e)}")
+        print(f"Type d'erreur: {type(e)}")
+        import traceback
+        traceback.print_exc()
+        return json.dumps({"error": str(e)}), 500
     if request.method == 'POST':
-
+        print(f"UPLOAD_FOLDER est configuré à: {UPLOAD_FOLDER}")
+        print(f"Chemin absolu: {os.path.abspath(UPLOAD_FOLDER)}")
         title = request.form['title']
         description = request.form['description']
         author_id = request.form['author_id']

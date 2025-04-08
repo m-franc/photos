@@ -2,9 +2,7 @@ import os
 from dotenv import load_dotenv
 from flask import (Flask, jsonify)
 
-import db
-import auth
-import blog
+from . import db
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from auth import bp as auth_bp
@@ -95,6 +93,5 @@ def create_app(test_config=None):
     db.init_app(app)
     app.register_blueprint(auth_bp)
     app.register_blueprint(blog_bp)
-
 
     return app

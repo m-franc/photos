@@ -7,6 +7,7 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from auth import bp as auth_bp
 from blog import bp as blog_bp
+from admin import bp as admin_bp
 
 from datetime import timedelta
 
@@ -14,8 +15,6 @@ jwt = JWTManager()
 
 def create_app(test_config=None):
     # create and configure the app
-
-
 
     app = Flask(__name__, instance_relative_config=True)
     @app.errorhandler(Exception)
@@ -90,8 +89,13 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+
+
     db.init_app(app)
     app.register_blueprint(auth_bp)
     app.register_blueprint(blog_bp)
+    app.register_blueprint(admin_bp)
+    blueprints = [name for name in app.blueprints.items()]
+    print(f"Registered blueprints: {blueprints}")
 
     return app

@@ -59,13 +59,15 @@ def login():
         user = db.execute(
             'SELECT * FROM user WHERE username = ?', (username,)
         ).fetchone()
-
+        print(user[0])
+        print(user[1])
+        print(user[3])
         if user is None:
             error = 'Incorrect username.'
         elif not check_password_hash(user['password'], password):
             error = 'Incorrect password.'
         if error is None:
-            data_user = { 'id': user[0], 'username': user[1] }
+            data_user = { 'id': user[0], 'username': user[1], 'role': user[3] }
             access_token = create_access_token(identity=user[1], additional_claims=data_user)
             response = make_response(jsonify({ "user": data_user }))
             set_access_cookies(response, access_token)

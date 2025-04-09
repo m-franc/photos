@@ -4,6 +4,7 @@ import * as React from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from 'next/navigation'
 import { useAppDispatch } from '../../redux/hook';
+import { store } from '../../redux/store';
 import { login } from '../../redux/authSlice';
 
 type FormData = {
@@ -35,7 +36,7 @@ export default function App() {
     } catch (error) {
       console.error('Erreur :', error);
     }
-    console.log(data)
+    console.log('State after login:', store.getState());
     router.push("/pictures")
   })
   // firstName and lastName will have correct type

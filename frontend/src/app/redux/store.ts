@@ -5,17 +5,19 @@ import { persistReducer, persistStore } from 'redux-persist';
 import { WebStorage } from 'redux-persist/lib/types';
 // import { serialize } from 'v8';
 
+
 interface CustomPersistConfig {
   key: string;
   storage: WebStorage;
   whitelist: string[];
+  debug: boolean;
 }
 
-const persistConfig: CustomPersistConfig = {
-  key: 'auth',
+const persistConfig: CustomPersistConfig | null = {
+  key: 'root',
   storage,
   whitelist: ['auth'],
-
+  debug: true,
 };
 
 const persistedReducer = persistReducer(persistConfig, authReducer);
@@ -34,9 +36,14 @@ export const store = configureStore({
     }),
 });
 
+console.log('Initial state:', store.getState());
+
+
 // Infer the type of makeStore
 export type AppStore = typeof store;
 // Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<AppStore['getState']>
-export type AppDispatch = AppStore['dispatch']
-export const persistor = persistStore(store);
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+export const isClient = typeof window !== 'undefined';
+export const shouldPersist = isClient && process.env.NEXT_PUBLIC_REDUX_PERSIST === 'true';
+export const persistor = shouldPersist ? persistStore(store) : null;

@@ -2,7 +2,7 @@
 
 import { Geist, Geist_Mono } from "next/font/google";
 import { Provider } from 'react-redux';
-import { store, persistor } from './redux/store'
+import { store, persistor, shouldPersist } from './redux/store'
 import { PersistGate } from 'redux-persist/integration/react';
 
 import "./globals.css";
@@ -31,9 +31,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            {children}
-          </PersistGate>
+          {shouldPersist && persistor ? (
+            <PersistGate loading={null} persistor={persistor}>
+              {children}
+            </PersistGate>
+          ) : (
+            children
+          )}
         </Provider>
       </body>
     </html>

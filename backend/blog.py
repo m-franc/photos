@@ -42,7 +42,7 @@ def load_user():
         # g.user = get_jwt_identity()
         claims = get_jwt()
         g.user = claims
-        # print("User identité:", g.user['id'])
+        print("User identité:", g.user['role'])
     except Exception as e:
         print("❌ Erreur JWT:", str(e))
         return abort(401, "Invalid token")

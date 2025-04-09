@@ -30,7 +30,8 @@ export default function App() {
       });
       const dataUser = await response.json();
       dispatch(login({id: dataUser.user.id,
-                      username: dataUser.user.username}));
+                      username: dataUser.user.username,
+                      role: dataUser.user.role}));
     } catch (error) {
       console.error('Erreur :', error);
     }
